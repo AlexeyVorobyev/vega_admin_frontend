@@ -1,52 +1,54 @@
 import React from "react";
-import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import {FormControl, MenuItem, TextField} from "@mui/material";
 import {Controller, useFormContext} from "react-hook-form";
 
 interface Value {
-    id:string,
-    name:string | number
+    id: string,
+    name: string | number
 }
-interface Props {
-    name:string
-    defaultValue?:Value
-    label?:string
-    options:Array<Value>
-}
-export const CustomSelect:React.FC<Props> =
-    ({
-        name,
-        defaultValue,
-        label,
-        options
-    }) => {
 
-    const { control } = useFormContext()
-    const _onChange = (event:any,onChange:Function) => {
-        const value = event.target.value
-        console.log(value)
-        for (const option of options) {
-            if (option.id === value) {
-                onChange(option)
-                break
-            }
-        }
-    }
+interface Props {
+    name: string
+    defaultValue?: Value
+    label?: string
+    options: Array<Value>
+    required?: boolean
+    error?: boolean,
+    errorText?: string
+}
+
+export const CustomSelect: React.FC<Props> = ({
+                                                name,
+                                                defaultValue,
+                                                label,
+                                                options,
+                                                required = true,
+                                                error,
+                                                errorText
+                                            }) => {
+    const {control} = useFormContext()
 
     return (
         <Controller
             name={name}
             defaultValue={defaultValue || ""}
             control={control}
-            render={({field : {onChange, value}}) => (
-                <FormControl fullWidth={true}>
-                    <InputLabel>{label || ""}</InputLabel>
-                    <Select
+            rules={{
+                validate: {
+                    required: required ? (value: string) => value?.length > 0 || 'required field' : () => true,
+                }
+            }}
+            render={({field: {onChange, value}}) => (
+                <FormControl fullWidth>
+                    <TextField
                         value={value?.id}
-                        label={label || null}
-                        onChange={(event) => _onChange(event,onChange)}
+                        label={error && errorText ? `${label}, ${errorText}` : label}
+                        error={error}
+                        onChange={onChange}
+                        select
                     >
-                        {options.map((value) => <MenuItem value={value.id}>{value.name}</MenuItem>)}
-                    </Select>
+                        {options.map((option) => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
+                    </TextField>
                 </FormControl>
             )
             }
