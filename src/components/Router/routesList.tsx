@@ -24,7 +24,7 @@ export const routesList: IRoute[] = [
     //
     // {path:'/tests', name:'Тесты', component:null},
 
-    {path: 'customisation', name: 'Настройки', icon: <SettingsIcon/>, component: null,
+    {path: 'customization', name: 'Настройки', icon: <SettingsIcon/>, component: null,
         routes:[
             {path: 'tutors', name: 'Настройка репетиторов', icon: <PersonIcon/>, component: null},
 

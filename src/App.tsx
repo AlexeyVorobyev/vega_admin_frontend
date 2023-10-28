@@ -1,29 +1,17 @@
 import React from "react";
-import './index.scss'
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-
-import {theme} from "./components/Theme/theme";
-import {ThemeProvider} from "@mui/system";
 import {SkeletonWrapper} from "./components/skeleton/SkeletonWrapper";
 import {RouterComponent} from "./components/Router/RouterComponent";
-import {store} from "./redux/store/store";
-import {Provider} from "react-redux";
-import {BrowserRouter} from "react-router-dom";
+import {useLoginStatus} from "./components/functions/useLoginStatus";
+import {routesList} from "./components/Router/routesList";
 
 const App:React.FC = () => {
+
+    useLoginStatus()
+
     return (
-        <Provider store={store}>
-            <ThemeProvider theme={theme}>
-                <BrowserRouter>
-                    <SkeletonWrapper>
-                        <RouterComponent/>
-                    </SkeletonWrapper>
-                </BrowserRouter>
-            </ThemeProvider>
-        </Provider>
+        <SkeletonWrapper>
+            <RouterComponent routesList={routesList}/>
+        </SkeletonWrapper>
     )
 }
 

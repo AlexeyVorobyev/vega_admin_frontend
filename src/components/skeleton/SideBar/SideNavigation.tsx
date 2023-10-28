@@ -1,27 +1,42 @@
-import {FC, useCallback} from "react";
-import {Box, List} from "@mui/material";
+import {FC, useCallback, useState} from "react";
+import {List, Stack, Switch, Tooltip} from "@mui/material";
 import {IRoute, routesList} from "../../Router/routesList";
 import {SideNavigationItem} from "./SideNavigationItem";
 
 export const SideNavigation: FC = () => {
 
-    const constructSideNavigation = useCallback((routesList: IRoute[], baseRoute:string[]) => {
+    const [isContracted, setIsContracted] = useState<boolean>(false)
+
+    const constructSideNavigation = useCallback((routesList: IRoute[], baseRoute: string[]) => {
         return routesList.map((item) => {
             if (item.routes) {
-                return (<SideNavigationItem key={item.name} name={item.name} path={[...baseRoute,item.path]} icon={item.icon}>
-                    {constructSideNavigation(item.routes,[...baseRoute,item.path])}
+                return (<SideNavigationItem key={item.name} name={item.name} path={[...baseRoute, item.path]}
+                                            icon={item.icon} isContracted={isContracted}>
+                    {constructSideNavigation(item.routes, [...baseRoute, item.path])}
                 </SideNavigationItem>)
             } else {
-                return <SideNavigationItem key={item.name} name={item.name} path={[...baseRoute,item.path]} icon={item.icon}/>
+                return <SideNavigationItem key={item.name} name={item.name} path={[...baseRoute, item.path]}
+                                           icon={item.icon} isContracted={isContracted}/>
             }
         })
-    }, [routesList])
+    }, [routesList, isContracted])
 
     return (
-        <Box width={'400px'} sx={{boxShadow: 2}}>
-            <List sx={{padding:'0'}}>
-                {constructSideNavigation(routesList,[])}
+        <Stack
+            direction={'column'}
+            justifyContent={'space-between'}
+            sx={{
+                width: isContracted ? '58px' : '400px',
+                boxShadow: 2,
+                transition: 'all 1s',
+            }}
+        >
+            <List sx={{padding: '0', overflow: 'hidden'}}>
+                {constructSideNavigation(routesList, [])}
             </List>
-        </Box>
+            <Tooltip title={isContracted ? 'Раскрыть меню' : 'Свернуть меню'}>
+                <Switch checked={!isContracted} onChange={() => setIsContracted(!isContracted)} color={'secondary'}/>
+            </Tooltip>
+        </Stack>
     )
 }

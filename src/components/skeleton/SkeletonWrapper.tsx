@@ -2,6 +2,7 @@ import {FC, ReactNode} from "react";
 import {Box, Stack, Typography} from "@mui/material";
 import {SideNavigation} from "./SideBar/SideNavigation";
 import {theme} from "../Theme/theme";
+import {PageWrapper} from "./PageWrapper";
 
 interface IProps {
     children:ReactNode
@@ -24,7 +25,9 @@ export const SkeletonWrapper:FC<IProps> = ({children}) => {
             <Stack height={'calc(100vh - 70px)'} width={'100%'} direction={'row'}>
                 <SideNavigation/>
                 <Box sx={{flex:'1', height:'100%'}}>
-                    {children}
+                    <PageWrapper>
+                        {children}
+                    </PageWrapper>
                 </Box>
             </Stack>
         </Box>
