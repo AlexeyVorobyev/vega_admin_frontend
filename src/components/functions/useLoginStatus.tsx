@@ -21,7 +21,7 @@ export const useLoginStatus = () => {
             console.log('unlogged')
             setLogin(false)
         }
-    },[user.is_auth])
+    },[user.isAuth])
 
 }
 

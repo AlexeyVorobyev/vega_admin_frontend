@@ -1,11 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
 export interface UserState {
-    is_auth:boolean,
+    isAuth:boolean,
 
 }
 
 const initialState:UserState = {
-    is_auth:false,
+    isAuth:false,
 }
 
 export const userSlice = createSlice({
@@ -13,7 +13,7 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setLogin: (state,{payload}) => {
-            state.is_auth = payload
+            state.isAuth = payload
         },
     }
 })

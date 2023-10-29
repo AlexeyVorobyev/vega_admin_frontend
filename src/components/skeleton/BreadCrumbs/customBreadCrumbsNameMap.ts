@@ -1,7 +1,7 @@
 export const customBreadCrumbsNameMap = new Map([
-    ['customization','Настройки'],
+    ['customization', 'Настройки'],
     ['tutors', 'Репетиторы'],
-    ['universities','ВУЗЫ'],
-    ['colleges','ССУЗЫ'],
-    ['tests','Тесты']
+    ['universities', 'ВУЗЫ'],
+    ['colleges', 'ССУЗЫ'],
+    ['tests', 'Тесты']
 ])

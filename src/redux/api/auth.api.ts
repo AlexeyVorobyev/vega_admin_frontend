@@ -2,16 +2,12 @@ import {api} from './api'
 import {
     LoginPayload,
     LoginResponse,
-    RefreshPayload,
-    RefreshResponse,
-    SignUpPayload,
-    SignUpResponse
 } from "./types/auth";
 export const authApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        authSignUp: builder.mutation<SignUpResponse,SignUpPayload>({
+        auth: builder.mutation<LoginResponse,LoginPayload>({
             query: (body) => ({
-                url:`/api/auth/signup`,
+                url:`/auth`,
                 method: 'POST',
                 headers: {
                     'Content-Type':'application/json'
@@ -19,24 +15,13 @@ export const authApi = api.injectEndpoints({
                 body
             }),
         }),
-        authRefresh: builder.mutation<RefreshResponse,RefreshPayload>({
-            query: (body) => ({
-                url:`/api/auth/refresh`,
+        me: builder.mutation<any,null>({
+            query: () => ({
+                url:`/me`,
                 method: 'POST',
                 headers: {
-                    'Content-Type':'application/json'
-                },
-                body
-            }),
-        }),
-        authLogin: builder.mutation<LoginResponse,LoginPayload>({
-            query: (body) => ({
-                url:`/api/auth/login`,
-                method: 'POST',
-                headers: {
-                    'Content-Type':'application/json'
-                },
-                body
+                    'authorization':'testdatabase'
+                }
             }),
         })
     }),
@@ -44,7 +29,6 @@ export const authApi = api.injectEndpoints({
 })
 
 export const {
-    useAuthLoginMutation,
-    useAuthRefreshMutation,
-    useAuthSignUpMutation
+    useAuthMutation,
+    useMeMutation
 } = authApi

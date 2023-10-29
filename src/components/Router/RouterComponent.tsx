@@ -2,7 +2,7 @@ import {FC, useCallback} from "react";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {IRoute} from "./routesList";
 
-export const RouterComponent: FC<{routesList:IRoute[]}> = ({routesList}) => {
+export const RouterComponent: FC<{ routesList: IRoute[] }> = ({routesList}) => {
 
     const constructRoutes = useCallback((routesList: IRoute[]) => {
         return routesList.map((item) => {
