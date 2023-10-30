@@ -7,6 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {Stack} from "@mui/material";
 
+//TODO FILTERS
+//TODO PAGINATION FOOTER
+//TODO READING QUERIES FROM QUERY STRING
 
 export interface ICustomDataTableColumn {
     id: string,
@@ -36,11 +39,14 @@ export const CustomDataTable: FC<IProps> = ({
             const resultFlatRow = new Map()
 
             for (const column of columns) {
-                if (item.hasOwnProperty(column.id)) {
-                    resultFlatRow.set(column.id, item[column.id as keyof Object])
-                    continue
+                if (!item.hasOwnProperty(column.id)) continue
+                if (typeof item[column.id as keyof Object] !== 'string' || column.format) {
+                    if (!column.format) continue
+                    resultFlatRow.set(column.id, column.format(item[column.id as keyof Object]))
                 }
-                //TODO Расписать логику чтения сложных элементов
+                else {
+                    resultFlatRow.set(column.id, item[column.id as keyof Object])
+                }
             }
 
             resultArr.push(resultFlatRow)
@@ -84,7 +90,7 @@ export const CustomDataTable: FC<IProps> = ({
                                         const value = row.get(column.id);
                                         return (
                                             <TableCell key={column.id} align={column.align}>
-                                                {column.format ? column.format(value) : value}
+                                                {value}
                                             </TableCell>
                                         );
                                     })}

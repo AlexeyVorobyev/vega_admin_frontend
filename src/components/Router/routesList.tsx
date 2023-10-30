@@ -5,6 +5,7 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import QuizIcon from '@mui/icons-material/Quiz';
 import PersonIcon from '@mui/icons-material/Person';
 import {TutorsTablePage} from "../pages/TutorsTablePage/TutorsTablePage";
+import {UniversitiesTablePage} from "../pages/UniversitiesTablePage/UniversitiesTablePage";
 
 export interface IRoute {
     path: string,
@@ -31,7 +32,7 @@ export const routesList: IRoute[] = [
         routes: [
             {path: 'tutors', name: 'Настройка репетиторов', icon: <PersonIcon/>, component: <TutorsTablePage/>},
 
-            {path: 'universities', name: 'Настройка ВУЗОВ', icon: <SchoolOutlinedIcon/>, component: null},
+            {path: 'universities', name: 'Настройка ВУЗОВ', icon: <SchoolOutlinedIcon/>, component: <UniversitiesTablePage/>},
 
             {path: 'colleges', name: 'Настройка ССУЗОВ', icon: <SchoolOutlinedIcon/>, component: null},
 
