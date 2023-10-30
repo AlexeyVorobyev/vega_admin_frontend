@@ -63,7 +63,9 @@ export const SideNavigationItem: FC<IProps> = ({
                                 opacity: isContracted ? '0' : '1',
                             }}>
                             <Typography
-                                color={isCurrentLocation ? theme.palette.secondary.main : theme.palette.text.primary}>{name}</Typography>
+                                color={isCurrentLocation ? theme.palette.secondary.main : theme.palette.text.primary}
+                                sx={{width:'max-content'}}
+                            >{name}</Typography>
                         </ListItemText>}
                     {children && !isContracted ? (open ? <ExpandLess sx={{color: theme.palette.text.primary}}/> :
                         <ExpandMore sx={{color: theme.palette.text.primary}}/>) : null}
