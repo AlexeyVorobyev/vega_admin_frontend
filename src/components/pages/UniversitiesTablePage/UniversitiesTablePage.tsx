@@ -23,6 +23,9 @@ const mockData = [
     }
 ]
 
+const mockDataMulti = new Array(...(function* (){for (let i = 0; i < 20; i++) yield mockData[0]})())
+console.log(mockDataMulti)
+
 export const UniversitiesTablePage: FC = () => {
     const [lazyUniversitiesQuery, result] = useLazyUniversitiesQuery()
 
@@ -36,7 +39,7 @@ export const UniversitiesTablePage: FC = () => {
 
     return (
         <Stack height={'100%'} width={'100%'} direction={'column'} spacing={2}>
-            <CustomDataTable columns={UniversitiesTableColumns} data={mockData || []}/>
+            <CustomDataTable columns={UniversitiesTableColumns} data={mockDataMulti || []}/>
         </Stack>
     )
 }

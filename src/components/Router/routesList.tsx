@@ -6,6 +6,7 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import PersonIcon from '@mui/icons-material/Person';
 import {TutorsTablePage} from "../pages/TutorsTablePage/TutorsTablePage";
 import {UniversitiesTablePage} from "../pages/UniversitiesTablePage/UniversitiesTablePage";
+import {RenderOnlyWrapper} from "./RenderOnlyWrapper";
 
 export interface IRoute {
     path: string,
@@ -13,6 +14,7 @@ export interface IRoute {
     component: ReactNode
     icon?: ReactNode
     routes?: IRoute[]
+    sideNavAppear?:boolean
 }
 
 
@@ -32,7 +34,12 @@ export const routesList: IRoute[] = [
         routes: [
             {path: 'tutors', name: 'Настройка репетиторов', icon: <PersonIcon/>, component: <TutorsTablePage/>},
 
-            {path: 'universities', name: 'Настройка ВУЗОВ', icon: <SchoolOutlinedIcon/>, component: <UniversitiesTablePage/>},
+            {path: 'universities', name: 'Настройка ВУЗОВ', icon: <SchoolOutlinedIcon/>,
+                component: <RenderOnlyWrapper paths={['/customization/universities']}><UniversitiesTablePage/></RenderOnlyWrapper>,
+                routes:[
+                    {path: 'university', name: 'карточка просмотра ВУЗа', component: <p>what</p>, sideNavAppear:false}
+                ]
+            },
 
             {path: 'colleges', name: 'Настройка ССУЗОВ', icon: <SchoolOutlinedIcon/>, component: null},
 

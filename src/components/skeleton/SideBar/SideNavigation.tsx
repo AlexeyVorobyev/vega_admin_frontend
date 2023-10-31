@@ -7,14 +7,26 @@ export const SideNavigation: FC = () => {
 
     const [isContracted, setIsContracted] = useState<boolean>(false)
 
+    const calcSideNavigationItemDisplay = useCallback((item:IRoute) => {
+        const res = item.routes?.map((_item) => _item.sideNavAppear).reduce((accumulator:number, currentValue) => {
+            if (currentValue !== false) {
+                return accumulator + 1
+            }
+            else {
+                return accumulator
+            }
+        },0)
+        return res
+    },[])
+
     const constructSideNavigation = useCallback((routesList: IRoute[], baseRoute: string[]) => {
         return routesList.map((item) => {
-            if (item.routes) {
+            if (item.routes && calcSideNavigationItemDisplay(item)) {
                 return (<SideNavigationItem key={item.name} name={item.name} path={[...baseRoute, item.path]}
                                             icon={item.icon} isContracted={isContracted}>
                     {constructSideNavigation(item.routes, [...baseRoute, item.path])}
                 </SideNavigationItem>)
-            } else {
+            } else if (item.sideNavAppear !== false || item.sideNavAppear === undefined) {
                 return <SideNavigationItem key={item.name} name={item.name} path={[...baseRoute, item.path]}
                                            icon={item.icon} isContracted={isContracted}/>
             }
