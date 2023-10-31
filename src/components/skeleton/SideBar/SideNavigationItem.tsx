@@ -1,14 +1,14 @@
 import {FC, ReactNode, useCallback, useMemo, useState} from "react";
 import {Collapse, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography} from "@mui/material";
 import {ExpandLess, ExpandMore} from "@mui/icons-material";
-import {Link, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {theme} from "../../Theme/theme";
-import {constructPathLink} from "../../functions/constructPathLink";
 import {checkLocation} from "../../functions/checkLocation";
+import {LinkRouterWrapper} from "../../LinkRouterWrapper/LinkRouterWrapper";
 
 interface IProps {
     name: string,
-    path: string[],
+    path: string | null,
     icon?: ReactNode
     isContracted: boolean
     children?: ReactNode
@@ -25,11 +25,9 @@ export const SideNavigationItem: FC<IProps> = ({
     const [open, setOpen] = useState<boolean>(false)
     const location = useLocation()
 
-    const constructedPathLink = useMemo(() => constructPathLink(path), [path])
+    const isCurrentLocation = path ? useMemo(() => checkLocation(location.pathname, path), [location, path]) : null
 
-    const isCurrentLocation = useMemo(() => checkLocation(location.pathname, constructedPathLink), [location, constructedPathLink])
-
-    const handleClick = useCallback(() => {
+    const handleClick = path ? useCallback(() => {
         if (open) {
             if (isCurrentLocation) {
                 setOpen(false)
@@ -37,14 +35,12 @@ export const SideNavigationItem: FC<IProps> = ({
         } else {
             setOpen(true)
         }
-    }, [location])
+    }, [location]) : useCallback(() => setOpen(!open), [open])
 
 
     return (
         <>
-            <Link
-                to={constructedPathLink}
-                style={{textDecoration: 'none'}}>
+            <LinkRouterWrapper to={path}>
                 <ListItemButton onClick={handleClick}
                                 sx={{padding: theme.spacing(1), paddingLeft: theme.spacing(2), height: '48px'}}>
                     {icon &&
@@ -64,13 +60,13 @@ export const SideNavigationItem: FC<IProps> = ({
                             }}>
                             <Typography
                                 color={isCurrentLocation ? theme.palette.secondary.main : theme.palette.text.primary}
-                                sx={{width:'max-content'}}
+                                sx={{width: 'max-content'}}
                             >{name}</Typography>
                         </ListItemText>}
                     {children && !isContracted ? (open ? <ExpandLess sx={{color: theme.palette.text.primary}}/> :
                         <ExpandMore sx={{color: theme.palette.text.primary}}/>) : null}
                 </ListItemButton>
-            </Link>
+            </LinkRouterWrapper>
             {children && <Collapse in={open}>
                 {children}
             </Collapse>}

@@ -1,25 +1,17 @@
 import {ReactNode} from "react";
-import QueryStatsIcon from '@mui/icons-material/QueryStats';
-import SettingsIcon from '@mui/icons-material/Settings';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import QuizIcon from '@mui/icons-material/Quiz';
-import PersonIcon from '@mui/icons-material/Person';
 import {TutorsTablePage} from "../pages/TutorsTablePage/TutorsTablePage";
 import {UniversitiesTablePage} from "../pages/UniversitiesTablePage/UniversitiesTablePage";
-import {RenderOnlyWrapper} from "./RenderOnlyWrapper";
 
 export interface IRoute {
     path: string,
     name: string
     component: ReactNode
-    icon?: ReactNode
     routes?: IRoute[]
-    sideNavAppear?:boolean
 }
 
 
 export const routesList: IRoute[] = [
-    {path: '/', name: 'Статистика', icon: <QueryStatsIcon/>, component: null},
+    {path: '/', name: 'Статистика', component: null},
 
     // {path:'/tutors', name:'Репетиторы', component:<p>xyz</p>},
     //
@@ -29,23 +21,16 @@ export const routesList: IRoute[] = [
     //
     // {path:'/tests', name:'Тесты', component:null},
 
-    {
-        path: 'customization', name: 'Настройки', icon: <SettingsIcon/>, component: null,
-        routes: [
-            {path: 'tutors', name: 'Настройка репетиторов', icon: <PersonIcon/>, component: <TutorsTablePage/>},
+    {path: 'customization/tutors', name: 'Настройка репетиторов', component: <TutorsTablePage/>},
 
-            {path: 'universities', name: 'Настройка ВУЗОВ', icon: <SchoolOutlinedIcon/>,
-                component: <RenderOnlyWrapper paths={['/customization/universities']}><UniversitiesTablePage/></RenderOnlyWrapper>,
-                routes:[
-                    {path: 'university', name: 'карточка просмотра ВУЗа', component: <p>what</p>, sideNavAppear:false}
-                ]
-            },
+    {path: 'customization/universities', name: 'Настройка ВУЗОВ', component:<UniversitiesTablePage/>},
+    {path: 'customization/universities/view', name: 'ВУЗ', component:null},
+    {path: 'customization/universities/edit', name: 'Настройка ВУЗА', component:null},
+    {path: 'customization/universities/new', name: 'Создание ВУЗА', component:null},
 
-            {path: 'colleges', name: 'Настройка ССУЗОВ', icon: <SchoolOutlinedIcon/>, component: null},
+    {path: 'customization/colleges', name: 'Настройка ССУЗОВ', component: null},
 
-            {path: 'tests', name: 'Настройка тестов', icon: <QuizIcon/>, component: null}
-        ]
-    },
+    {path: 'customization/tests', name: 'Настройка тестов', component: null}
 ]
 
 const mapRoutesList = (routesList: IRoute[]): [string, string][] => {

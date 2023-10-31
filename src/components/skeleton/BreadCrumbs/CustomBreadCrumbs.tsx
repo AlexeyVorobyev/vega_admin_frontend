@@ -5,6 +5,7 @@ import {constructPathLink} from "../../functions/constructPathLink";
 import {theme} from "../../Theme/theme";
 import {checkLocation} from "../../functions/checkLocation";
 import {customBreadCrumbsNameMap} from "./customBreadCrumbsNameMap";
+import {LinkRouterWrapper} from "../../LinkRouterWrapper/LinkRouterWrapper";
 
 interface IBreadCrumbConfig {
     linkTo: string,
@@ -25,21 +26,18 @@ export const CustomBreadCrumbs: FC = () => {
             const slicedArr = pathArr.slice(0, i)
             const name = slicedArr[slicedArr.length - 1]
             breadCrumbsConfig.push({
-                name: customBreadCrumbsNameMap.get(name) || name,
+                name: customBreadCrumbsNameMap.get(constructPathLink(slicedArr)) || name,
                 linkTo: constructPathLink(slicedArr)
             })
         }
 
-        console.log(breadCrumbsConfig)
-
-        return breadCrumbsConfig.map((item) => <Link
+        return breadCrumbsConfig.map((item) => <LinkRouterWrapper
             key={item.linkTo}
-            to={item.linkTo}
-            style={{textDecoration: 'none'}}>
+            to={!forbiddenLinks.includes(item.linkTo) ? item.linkTo : null}>
             <Typography variant={'subtitle2'}
                         color={checkLocation(location.pathname, item.linkTo) ? theme.palette.secondary.main : '#000000'}
                         height={'24px'}>{item.name}</Typography>
-        </Link>)
+        </LinkRouterWrapper>)
     }, [pathArr])
 
     return (
@@ -56,3 +54,5 @@ export const CustomBreadCrumbs: FC = () => {
         </Breadcrumbs>
     )
 }
+
+const forbiddenLinks = ['customization']
