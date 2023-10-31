@@ -5,7 +5,9 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Stack} from "@mui/material";
+import {Box, Divider, Stack} from "@mui/material";
+import {CustomDataTableFooter} from "./CustomDataTableFooter";
+import {useNavigate} from "react-router-dom";
 
 //TODO FILTERS
 //TODO PAGINATION FOOTER
@@ -22,14 +24,27 @@ export interface ICustomDataTableColumn {
 
 type ICustomDataTableRow = Map<string, string>
 
+interface IActionConfig {
+    columnName: string // номер столбца для использования в роли id
+    path: string // путь к странице
+}
+
+interface IActionsConfig {
+    view?: IActionConfig,
+    add?: IActionConfig,
+    edit?: IActionConfig
+}
+
 interface IProps {
     columns: ICustomDataTableColumn[],
     data: Object[]
+    actionsConfig?: IActionsConfig
 }
 
 export const CustomDataTable: FC<IProps> = ({
                                                 columns,
-                                                data
+                                                data,
+                                                actionsConfig
                                             }) => {
 
     const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] => {
@@ -43,8 +58,7 @@ export const CustomDataTable: FC<IProps> = ({
                 if (typeof item[column.id as keyof Object] !== 'string' || column.format) {
                     if (!column.format) continue
                     resultFlatRow.set(column.id, column.format(item[column.id as keyof Object]))
-                }
-                else {
+                } else {
                     resultFlatRow.set(column.id, item[column.id as keyof Object])
                 }
             }
@@ -56,12 +70,28 @@ export const CustomDataTable: FC<IProps> = ({
     }, [columns, data])
 
     const rows = useMemo(() => FormatFlatData(columns, data), [columns, data])
+    const navigate = useNavigate()
 
-    console.log(rows)
+    const handleRedirect = useCallback((id: string, path: string) => {
+        navigate(`${path}?id=${id}`)
+    }, [rows])
 
     return (
-        <Stack sx={{height: '100%', width: '100%'}} direction={'column'}>
-            <TableContainer sx={{width: '100%'}}>
+        <Stack sx={{height: '100%', width: '100%'}} direction={'column'} useFlexGap>
+            <TableContainer sx={{
+                width: '100%',
+                "&::-webkit-scrollbar": {
+                    width: 5,
+                    height: 5
+                },
+                "&::-webkit-scrollbar-track": {
+                    backgroundColor: null
+                },
+                "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "#b2b2b2",
+                    borderRadius: 2
+                }
+            }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -83,7 +113,12 @@ export const CustomDataTable: FC<IProps> = ({
                     <TableBody>
                         {rows.map((row, index) => {
                             return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                <TableRow hover={Boolean(actionsConfig?.view)}
+                                          sx={{cursor: actionsConfig?.view ? 'pointer' : undefined}} role="checkbox"
+                                          tabIndex={-1} key={index}
+                                          onClick={actionsConfig?.view ? () => {
+                                              handleRedirect(row.get(actionsConfig!.view!.columnName) || '', actionsConfig?.view?.path!)
+                                          } : undefined}>
                                     {columns.map((column) => {
                                         if (column.display === false) return
 
@@ -100,6 +135,10 @@ export const CustomDataTable: FC<IProps> = ({
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Divider/>
+            <Box marginTop={'auto'} width={'100%'}>
+                <CustomDataTableFooter availablePages={10}/>
+            </Box>
         </Stack>
     );
 }

@@ -3,6 +3,9 @@ import {CustomDataTable} from "../../CustomDataTable/CustomDataTable";
 import {Stack} from "@mui/material";
 import {UniversitiesTableColumns} from "./columns";
 import {useLazyUniversitiesQuery} from "../../../redux/api/universities.api";
+import {useLocation} from "react-router-dom";
+import {usePageState} from "../../functions/usePageState";
+import {varsBehaviourMapUniversities} from "./varsBehaviourMapUniversities";
 
 const mockData = [
     {
@@ -23,23 +26,37 @@ const mockData = [
     }
 ]
 
-const mockDataMulti = new Array(...(function* (){for (let i = 0; i < 20; i++) yield mockData[0]})())
+const mockDataMulti = new Array(...(function* () {
+    for (let i = 0; i < 20; i++) yield mockData[0]
+})())
 console.log(mockDataMulti)
 
 export const UniversitiesTablePage: FC = () => {
     const [lazyUniversitiesQuery, result] = useLazyUniversitiesQuery()
 
+    const {variables} = usePageState({
+        varsBehaviorMap:varsBehaviourMapUniversities
+    })
+
     useEffect(() => {
-        lazyUniversitiesQuery({page:0,size:10})
-    },[])
+        variables && lazyUniversitiesQuery(variables)
+    }, [variables])
 
     useEffect(() => {
         console.log(result)
-    },[result])
+    }, [result])
+
+    const location = useLocation()
 
     return (
         <Stack height={'100%'} width={'100%'} direction={'column'} spacing={2}>
-            <CustomDataTable columns={UniversitiesTableColumns} data={mockDataMulti || []}/>
+            <CustomDataTable columns={UniversitiesTableColumns} data={mockDataMulti || []}
+                             actionsConfig={{
+                                 view: {
+                                     columnName:'id',
+                                     path:`${location.pathname}/view`
+                                 }
+                             }}/>
         </Stack>
     )
 }
