@@ -24,7 +24,7 @@ export const SkeletonWrapper:FC<IProps> = ({children}) => {
             </Box>
             <Stack height={'calc(100vh - 70px)'} width={'100%'} direction={'row'}>
                 <SideNavigation/>
-                <Box sx={{flex:'1', height:'100%'}}>
+                <Box sx={{flex:'1', height:'100%',width:'0'}}>
                     <PageWrapper>
                         {children}
                     </PageWrapper>

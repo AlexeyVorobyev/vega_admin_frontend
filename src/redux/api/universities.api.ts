@@ -28,6 +28,8 @@ const constructUniversitiesQueryString = (config:IUniversitiesPayload):string =>
         }
     }
 
+    console.log('DEBUG QUERYPARAMS',resString)
+
     return resString === '?' ? '' : resString
 }
 

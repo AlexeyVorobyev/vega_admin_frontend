@@ -1,17 +1,17 @@
-import {FC, useCallback, useMemo} from 'react';
+import {FC, useCallback, useMemo, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Box, Divider, Stack} from "@mui/material";
+import {Box, CircularProgress, Divider, Stack} from "@mui/material";
 import {CustomDataTableFooter} from "./CustomDataTableFooter";
 import {useNavigate} from "react-router-dom";
+import {CustomDataTableActions} from "./CustomDataTableActions";
 
 //TODO FILTERS
-//TODO PAGINATION FOOTER
-//TODO READING QUERIES FROM QUERY STRING
+//TODO Сделать нормальную страницу об отсутствии данных
 
 export interface ICustomDataTableColumn {
     id: string,
@@ -22,14 +22,14 @@ export interface ICustomDataTableColumn {
     display?: boolean
 }
 
-type ICustomDataTableRow = Map<string, string>
+export type ICustomDataTableRow = Map<string, string>
 
-interface IActionConfig {
+export interface IActionConfig {
     columnName: string // номер столбца для использования в роли id
     path: string // путь к странице
 }
 
-interface IActionsConfig {
+export interface IActionsConfig {
     view?: IActionConfig,
     add?: IActionConfig,
     edit?: IActionConfig
@@ -39,15 +39,19 @@ interface IProps {
     columns: ICustomDataTableColumn[],
     data: Object[]
     actionsConfig?: IActionsConfig
+    availablePages: number
 }
 
 export const CustomDataTable: FC<IProps> = ({
                                                 columns,
                                                 data,
-                                                actionsConfig
+                                                actionsConfig,
+                                                availablePages
                                             }) => {
 
-    const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] => {
+    const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] | null => {
+        if (!data) return null
+
         const resultArr = []
 
         for (const item of data) {
@@ -76,6 +80,8 @@ export const CustomDataTable: FC<IProps> = ({
         navigate(`${path}?id=${id}`)
     }, [rows])
 
+    const [preventEvent,setPreventEvent] = useState<boolean>(false)
+
     return (
         <Stack sx={{height: '100%', width: '100%'}} direction={'column'} useFlexGap>
             <TableContainer sx={{
@@ -90,45 +96,61 @@ export const CustomDataTable: FC<IProps> = ({
                 "&::-webkit-scrollbar-thumb": {
                     backgroundColor: "#b2b2b2",
                     borderRadius: 2
-                }
+                },
             }}>
-                <Table stickyHeader aria-label="sticky table">
+                <Table stickyHeader>
                     <TableHead>
                         <TableRow>
-                            {columns.map((column) => {
-                                if (column.display === false) return
-
-                                return (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{minWidth: column.minWidth}}
-                                    >
-                                        {column.label}
+                            {[
+                                ...columns.map((column) => {
+                                    if (column.display === false) return
+                                    return (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{minWidth: column.minWidth}}
+                                        >
+                                            {column.label}
+                                        </TableCell>
+                                    )
+                                }),
+                                actionsConfig ?
+                                    <TableCell key={'actions'} align={'left'}>
+                                        Действия
                                     </TableCell>
-                                )
-                            })}
+                                    : undefined
+                            ]}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, index) => {
+                        {!rows && <CircularProgress/>}
+                        {rows && !rows.length && <p>Данных нет</p>}
+                        {rows && rows?.length && rows.map((row, index) => {
                             return (
                                 <TableRow hover={Boolean(actionsConfig?.view)}
                                           sx={{cursor: actionsConfig?.view ? 'pointer' : undefined}} role="checkbox"
                                           tabIndex={-1} key={index}
                                           onClick={actionsConfig?.view ? () => {
+                                              if (preventEvent) return
                                               handleRedirect(row.get(actionsConfig!.view!.columnName) || '', actionsConfig?.view?.path!)
                                           } : undefined}>
-                                    {columns.map((column) => {
-                                        if (column.display === false) return
-
-                                        const value = row.get(column.id);
-                                        return (
-                                            <TableCell key={column.id} align={column.align}>
-                                                {value}
-                                            </TableCell>
-                                        );
-                                    })}
+                                    {[
+                                        ...columns.map((column) => {
+                                            if (column.display === false) return
+                                            const value = row.get(column.id)
+                                            return (
+                                                <TableCell key={column.id} align={column.align || 'left'}>
+                                                    {value}
+                                                </TableCell>
+                                            )
+                                        }),
+                                        actionsConfig ?
+                                            (<TableCell key={'actions'} align={'left'}>
+                                                <CustomDataTableActions actionsConfig={actionsConfig} row={row}
+                                                                        handleRedirect={handleRedirect} setPreventEvent={setPreventEvent}/>
+                                            </TableCell>)
+                                            : undefined
+                                    ]}
                                 </TableRow>
                             );
                         })}
@@ -137,7 +159,7 @@ export const CustomDataTable: FC<IProps> = ({
             </TableContainer>
             <Divider/>
             <Box marginTop={'auto'} width={'100%'}>
-                <CustomDataTableFooter availablePages={10}/>
+                <CustomDataTableFooter availablePages={availablePages}/>
             </Box>
         </Stack>
     );

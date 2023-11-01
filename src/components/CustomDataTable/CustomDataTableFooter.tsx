@@ -1,4 +1,4 @@
-import {FC, useEffect, useLayoutEffect, useState} from "react";
+import {FC, useLayoutEffect, useMemo, useState} from "react";
 import {FormControl, MenuItem, Pagination, Stack, TextField, Typography} from "@mui/material";
 import {theme} from "../Theme/theme";
 import {useSearchParams} from "react-router-dom";
@@ -10,10 +10,20 @@ interface IProps {
 export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [page, setPage] = useState<string | null>(searchParams.get('page') || null);
-    const [perPage, setPerPage] = useState<string>(searchParams.get('perPage') || '8')
+    const [perPage, setPerPage] = useState<string | null>(searchParams.get('perPage') || null)
     const options = ['1', '2', '4', '8', '16', '32']
+    const savedPages = useMemo(() => availablePages,[searchParams,page,perPage])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+        if (!page) {
+            setPage(searchParams.get('page'))
+        }
+        if (!perPage) {
+            setPerPage(searchParams.get('perPage'))
+        }
+    }, [searchParams])
+
+    useLayoutEffect(() => {
         page && searchParams.get('page') && setSearchParams(new URLSearchParams([
             ['page', page],
             ...Array.from(searchParams.entries()).filter((item) => item[0] !== 'page'),
@@ -21,13 +31,13 @@ export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
     }, [page])
 
     useLayoutEffect(() => {
-        page && searchParams.get('perPage') && setSearchParams(new URLSearchParams([
+        perPage && searchParams.get('perPage') && setSearchParams(new URLSearchParams([
             ['perPage', perPage],
             ...Array.from(searchParams.entries()).filter((item) => item[0] !== 'perPage'),
         ]))
     }, [perPage])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setSearchParams(new URLSearchParams([
             ...Array.from(searchParams.entries()),
             !searchParams.get('perPage') ? ['perPage', '8'] : [],
@@ -52,7 +62,7 @@ export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
                     </TextField>
                 </FormControl>
             </Stack>
-            <Pagination count={availablePages} page={Number(page) + 1}
+            <Pagination count={savedPages || availablePages || 10} page={Number(page) + 1}
                 // @ts-ignore
                         onChange={(event: any, value) => setPage((value - 1).toString())}/>
         </Stack>

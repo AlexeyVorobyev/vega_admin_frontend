@@ -15,10 +15,6 @@ export const UniversitiesTableColumns:ICustomDataTableColumn[] = [
         label: 'Короткое название',
     },
     {
-        id: 'description',
-        label: 'Описание',
-    },
-    {
         id: 'address',
         label: 'Адрес',
     },
@@ -37,21 +33,3 @@ export const UniversitiesTableColumns:ICustomDataTableColumn[] = [
         format: (value:any) => value === EGrade.High ? 'Старший' : 'Младший'
     }
 ]
-
-
-// {
-//     id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//     title: "string",
-//     shortTitle: "string",
-//     description: "string",
-//     address: "string",
-//     site: "string",
-//     town: {
-//     id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//         title: "string"
-// },
-//     grade: "HIGH",
-//         cardPhoto: "string",
-//     priority: 0,
-//     studentsTelegramChatUrl: "string"
-// }
