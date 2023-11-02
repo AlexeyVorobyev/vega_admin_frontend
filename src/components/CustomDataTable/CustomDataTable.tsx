@@ -5,17 +5,15 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Box, CircularProgress, Divider, Stack, TableSortLabel, Typography} from "@mui/material";
+import {Box, CircularProgress, Divider, Stack, Typography} from "@mui/material";
 import {CustomDataTableFooter} from "./CustomDataTableFooter";
 import {useNavigate} from "react-router-dom";
 import {CustomDataTableActions} from "./CustomDataTableActions";
 import {MutationTrigger} from "@reduxjs/toolkit/dist/query/react/buildHooks";
 import {CustomDataTableHeader} from "./CustomDataTableHeader";
-import {theme} from "../Theme/theme";
 import {CustomDataTableSortWrapper} from "./CustomDataTableSortWrapper";
 
 //TODO FILTERS
-//TODO SORTING
 //TODO SIMPLEFILTER AND HEADER
 
 export interface ICustomDataTableColumn {
