@@ -157,8 +157,8 @@ export const CustomDataTable: FC<IProps> = ({
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Divider/>
             <Box marginTop={'auto'} width={'100%'}>
+                <Divider/>
                 <CustomDataTableFooter availablePages={availablePages}/>
             </Box>
         </Stack>

@@ -1,4 +1,4 @@
-import {FC, useLayoutEffect, useMemo, useState} from "react";
+import {FC, useLayoutEffect, useRef, useState} from "react";
 import {FormControl, MenuItem, Pagination, Stack, TextField, Typography} from "@mui/material";
 import {theme} from "../Theme/theme";
 import {useSearchParams} from "react-router-dom";
@@ -12,7 +12,11 @@ export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
     const [page, setPage] = useState<string | null>(searchParams.get('page') || null);
     const [perPage, setPerPage] = useState<string | null>(searchParams.get('perPage') || null)
     const options = ['1', '2', '4', '8', '16', '32']
-    const savedPages = useMemo(() => availablePages,[searchParams,page,perPage])
+    const savedPages = useRef<number | null>(availablePages || null)
+
+    useLayoutEffect(() => {
+        availablePages && (savedPages.current = availablePages)
+    }, [availablePages])
 
     useLayoutEffect(() => {
         if (!page) {
@@ -62,7 +66,7 @@ export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
                     </TextField>
                 </FormControl>
             </Stack>
-            <Pagination count={savedPages || availablePages || 10} page={Number(page) + 1}
+            <Pagination count={availablePages || savedPages.current || 10} page={Number(page) + 1}
                 // @ts-ignore
                         onChange={(event: any, value) => setPage((value - 1).toString())}/>
         </Stack>
