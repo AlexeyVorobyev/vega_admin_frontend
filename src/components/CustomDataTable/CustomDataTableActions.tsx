@@ -1,39 +1,35 @@
 import React, {FC, useState} from "react";
 import {IActionsConfig, ICustomDataTableRow} from "./CustomDataTable";
-import {IconButton, Popover, Typography} from "@mui/material";
+import {Button, IconButton, Popover, Stack, Typography} from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import {theme} from "../Theme/theme";
+import {useNavigate} from "react-router-dom";
 
 interface IProps {
     actionsConfig: IActionsConfig
     row: ICustomDataTableRow
-    handleRedirect: (id: string, path: string) => void
-    setPreventEvent: any
 }
 
 export const CustomDataTableActions: FC<IProps> = ({
                                                        actionsConfig,
                                                        row,
-                                                       handleRedirect,
-                                                       setPreventEvent
                                                    }) => {
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation()
-        setPreventEvent(true)
         setAnchorEl(event.currentTarget)
-        setTimeout(() => {
-            setPreventEvent(false)
-        },300)
     };
 
-    const handleClose = () => {
+    const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation()
         setAnchorEl(null)
     };
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined
+    const navigate = useNavigate()
 
     return (
         <>
@@ -50,7 +46,29 @@ export const CustomDataTableActions: FC<IProps> = ({
                     horizontal: 'left',
                 }}
             >
-                <Typography sx={{p: 2}}>The content of the Popover.</Typography>
+                <Stack direction={'column'} spacing={theme.spacing(1)} padding={theme.spacing(2)}>
+                    {actionsConfig.view &&
+                        (<Button
+                            variant={'text'}
+                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation()
+                                navigate(`${actionsConfig?.view?.path!}?id=${row.get(actionsConfig!.view!.columnName)}`)
+                            }}>
+                            <Typography variant={'button'} color={theme.palette.text.primary}>Просмотр</Typography>
+                        </Button>)}
+                    {actionsConfig.edit &&
+                        (<Button
+                            variant={'text'}
+                            onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                                event.stopPropagation()
+                                navigate(`${actionsConfig?.edit?.path!}?id=${row.get(actionsConfig!.view!.columnName)}`)
+                            }}>
+                            <Typography variant={'button'} color={theme.palette.text.primary}>Редактировать</Typography>
+                        </Button>)}
+                    {/*<Button variant={'text'}>*/}
+                    {/*    <Typography variant={'button'} color={theme.palette.text.primary}>Удалить</Typography>*/}
+                    {/*</Button>*/}
+                </Stack>
             </Popover>
         </>
     )

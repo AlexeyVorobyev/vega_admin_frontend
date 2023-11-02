@@ -29,10 +29,15 @@ export const UniversitiesTablePage: FC = () => {
             <CustomDataTable columns={UniversitiesTableColumns}
                              data={result?.currentData?.content}
                              availablePages={result?.currentData?.totalPages}
+                             perPageOptions={['1', '2', '4', '8', '16', '32']}
                              actionsConfig={{
                                  view: {
                                      columnName: 'id',
                                      path: `${location.pathname}/view`
+                                 },
+                                 edit: {
+                                     columnName: 'id',
+                                     path: `${location.pathname}/edit`
                                  }
                              }}/>
         </Stack>

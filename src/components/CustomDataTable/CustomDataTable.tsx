@@ -1,4 +1,4 @@
-import {FC, useCallback, useMemo, useState} from 'react';
+import {FC, useCallback, useMemo} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -31,7 +31,6 @@ export interface IActionConfig {
 
 export interface IActionsConfig {
     view?: IActionConfig,
-    add?: IActionConfig,
     edit?: IActionConfig
 }
 
@@ -39,14 +38,16 @@ interface IProps {
     columns: ICustomDataTableColumn[],
     data: Object[]
     actionsConfig?: IActionsConfig
-    availablePages: number
+    availablePages: number,
+    perPageOptions?: string[]
 }
 
 export const CustomDataTable: FC<IProps> = ({
                                                 columns,
                                                 data,
                                                 actionsConfig,
-                                                availablePages
+                                                availablePages,
+                                                perPageOptions = ['1', '2', '4', '8', '16', '32']
                                             }) => {
 
     const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] | null => {
@@ -75,12 +76,6 @@ export const CustomDataTable: FC<IProps> = ({
 
     const rows = useMemo(() => FormatFlatData(columns, data), [columns, data])
     const navigate = useNavigate()
-
-    const handleRedirect = useCallback((id: string, path: string) => {
-        navigate(`${path}?id=${id}`)
-    }, [rows])
-
-    const [preventEvent,setPreventEvent] = useState<boolean>(false)
 
     return (
         <Stack sx={{height: '100%', width: '100%'}} direction={'column'} useFlexGap>
@@ -131,8 +126,7 @@ export const CustomDataTable: FC<IProps> = ({
                                           sx={{cursor: actionsConfig?.view ? 'pointer' : undefined}} role="checkbox"
                                           tabIndex={-1} key={index}
                                           onClick={actionsConfig?.view ? () => {
-                                              if (preventEvent) return
-                                              handleRedirect(row.get(actionsConfig!.view!.columnName) || '', actionsConfig?.view?.path!)
+                                              navigate(`${actionsConfig?.view?.path!}?id=${row.get(actionsConfig!.view!.columnName)}`)
                                           } : undefined}>
                                     {[
                                         ...columns.map((column) => {
@@ -146,8 +140,7 @@ export const CustomDataTable: FC<IProps> = ({
                                         }),
                                         actionsConfig ?
                                             (<TableCell key={'actions'} align={'left'}>
-                                                <CustomDataTableActions actionsConfig={actionsConfig} row={row}
-                                                                        handleRedirect={handleRedirect} setPreventEvent={setPreventEvent}/>
+                                                <CustomDataTableActions actionsConfig={actionsConfig} row={row}/>
                                             </TableCell>)
                                             : undefined
                                     ]}
@@ -159,7 +152,7 @@ export const CustomDataTable: FC<IProps> = ({
             </TableContainer>
             <Box marginTop={'auto'} width={'100%'}>
                 <Divider/>
-                <CustomDataTableFooter availablePages={availablePages}/>
+                <CustomDataTableFooter availablePages={availablePages} perPageOptions={perPageOptions}/>
             </Box>
         </Stack>
     );

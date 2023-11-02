@@ -5,13 +5,16 @@ import {useSearchParams} from "react-router-dom";
 
 interface IProps {
     availablePages: number,
+    perPageOptions: string[]
 }
 
-export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
+export const CustomDataTableFooter: FC<IProps> = ({
+                                                      availablePages,
+                                                      perPageOptions
+                                                  }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [page, setPage] = useState<string | null>(searchParams.get('page') || null);
     const [perPage, setPerPage] = useState<string | null>(searchParams.get('perPage') || null)
-    const options = ['1', '2', '4', '8', '16', '32']
     const savedPages = useRef<number | null>(availablePages || null)
 
     useLayoutEffect(() => {
@@ -19,6 +22,7 @@ export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
     }, [availablePages])
 
     useLayoutEffect(() => {
+        console.log(perPage)
         if (!page) {
             setPage(searchParams.get('page'))
         }
@@ -44,7 +48,7 @@ export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
     useLayoutEffect(() => {
         setSearchParams(new URLSearchParams([
             ...Array.from(searchParams.entries()),
-            !searchParams.get('perPage') ? ['perPage', '8'] : [],
+            !searchParams.get('perPage') ? ['perPage', perPageOptions[perPageOptions.length/2]] : [],
             !searchParams.get('page') ? ['page', '0'] : [],
         ].filter((item) => item.length)))
     }, [searchParams])
@@ -61,7 +65,7 @@ export const CustomDataTableFooter: FC<IProps> = ({availablePages}) => {
                         onChange={(event) => setPerPage(event.target.value)}
                         select
                     >
-                        {options.map((option) => <MenuItem key={option.toString()}
+                        {perPageOptions.map((option) => <MenuItem key={option.toString()}
                                                            value={option.toString()}>{option.toString()}</MenuItem>)}
                     </TextField>
                 </FormControl>
