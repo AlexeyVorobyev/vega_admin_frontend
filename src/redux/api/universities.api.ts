@@ -39,11 +39,15 @@ export const universitiesApi = api.injectEndpoints({
             query: (settings) => ({
                 url:'/university' + constructUniversitiesQueryString(settings),
                 method: 'GET',
-                headers: {
-
-                }
             }),
-            providesTags:['tag1']
+            providesTags:['universities']
+        }),
+        universityDelete: builder.mutation<any,{id:string}>({
+            query: (settings) => ({
+                url:`/university/${settings.id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags:['universities']
         }),
         templateMutation: builder.mutation({
             query: (settings:{id:number,body:never}) => ({
@@ -60,5 +64,6 @@ export const universitiesApi = api.injectEndpoints({
 })
 
 export const {
-    useLazyUniversitiesQuery
+    useLazyUniversitiesQuery,
+    useUniversityDeleteMutation
 } = universitiesApi

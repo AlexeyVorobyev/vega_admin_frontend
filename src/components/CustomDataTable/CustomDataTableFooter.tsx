@@ -22,7 +22,6 @@ export const CustomDataTableFooter: FC<IProps> = ({
     }, [availablePages])
 
     useLayoutEffect(() => {
-        console.log(perPage)
         if (!page) {
             setPage(searchParams.get('page'))
         }
@@ -48,7 +47,7 @@ export const CustomDataTableFooter: FC<IProps> = ({
     useLayoutEffect(() => {
         setSearchParams(new URLSearchParams([
             ...Array.from(searchParams.entries()),
-            !searchParams.get('perPage') ? ['perPage', perPageOptions[perPageOptions.length/2]] : [],
+            !searchParams.get('perPage') ? ['perPage', perPageOptions[perPageOptions.length / 2]] : [],
             !searchParams.get('page') ? ['page', '0'] : [],
         ].filter((item) => item.length)))
     }, [searchParams])
@@ -64,9 +63,10 @@ export const CustomDataTableFooter: FC<IProps> = ({
                         value={perPage}
                         onChange={(event) => setPerPage(event.target.value)}
                         select
+                        size={'small'}
                     >
                         {perPageOptions.map((option) => <MenuItem key={option.toString()}
-                                                           value={option.toString()}>{option.toString()}</MenuItem>)}
+                                                                  value={option.toString()}>{option.toString()}</MenuItem>)}
                     </TextField>
                 </FormControl>
             </Stack>

@@ -4,7 +4,9 @@ import {SideNavigationItem} from "./SideNavigationItem";
 import {sideNavigationConfig, ISideNavigationConfig} from "./sideNavigationConfig";
 
 export const SideNavigation: FC = () => {
-    const [isContracted, setIsContracted] = useState<boolean>(false)
+    const [isContracted, setIsContracted] = useState<boolean>(
+        (sessionStorage.getItem('sideNavigationIsContractedState') || 'contracted') === 'true'
+    )
 
     const constructSideNavigation = useCallback((sideNavigationConfig: ISideNavigationConfig[]) => {
         return sideNavigationConfig.map((item) => {
@@ -34,7 +36,10 @@ export const SideNavigation: FC = () => {
                 {constructSideNavigation(sideNavigationConfig)}
             </List>
             <Tooltip title={isContracted ? 'Раскрыть меню' : 'Свернуть меню'}>
-                <Switch checked={!isContracted} onChange={() => setIsContracted(!isContracted)} color={'secondary'}/>
+                <Switch checked={!isContracted} onChange={() => {
+                    sessionStorage.setItem('sideNavigationIsContractedState', !isContracted ? 'true' : 'false')
+                    setIsContracted(!isContracted)
+                }} color={'secondary'}/>
             </Tooltip>
         </Stack>
     )

@@ -1,5 +1,31 @@
 import {createTheme} from "@mui/material";
 
+// Augment the palette to include an ochre color
+declare module '@mui/material/styles' {
+    interface Palette {
+        neutral: PaletteColorOptions;
+    }
+
+    interface PaletteOptions {
+        neutral?: PaletteColorOptions;
+    }
+
+    interface PaletteColorOptions {
+        main?:string
+        light?:string,
+        dark?:string
+        contrastText?:string
+        notContrastText?:string
+    }
+}
+
+// Update the Button's color options to include an ochre option
+declare module '@mui/material/Button' {
+    interface ButtonPropsColorOverrides {
+        neutral: true;
+    }
+}
+
 export const theme = createTheme({
     palette: {
         primary: {
@@ -14,5 +40,12 @@ export const theme = createTheme({
             dark: '#01579B',
             contrastText: '#fff',
         },
+        neutral: {
+            main:'#757575',
+            light:'#9e9e9e',
+            dark:'#616161',
+            contrastText:'#212121',
+            notContrastText:'#616161'
+        }
     },
 })
