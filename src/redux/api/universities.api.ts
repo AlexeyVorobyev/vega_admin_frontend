@@ -1,66 +1,45 @@
 import {api} from './api'
-import {ESort, IUniversitiesPayload} from "./types/universities";
+import {IUniversitiesPayload} from "./types/universities";
 
 
-const constructUniversitiesQueryString = (config:IUniversitiesPayload):string => {
+const constructUniversitiesQueryString = (config: IUniversitiesPayload): string => {
     let resString = '?'
 
     for (const key of Object.keys(config)) {
-        if (key === 'sort') {
-            const resSort:string[] = []
-
-            for (const key in Object.keys(config.sort!)) {
-                if (config.sort![key] === ESort.ascending) {
-                    resSort.push(`${key},${ESort.ascending}`)
-                }
-                else if (config.sort![key] === ESort.descending) {
-                    resSort.push(`${key},${ESort.descending}`)
-                }
-                else {
-                    throw new Error('problems with sort enum in construction of query string')
-                }
-            }
-
-            resString += `sort=${JSON.stringify(resSort)}&`
-        }
-        else {
-            resString += `${key}=${config[key as keyof IUniversitiesPayload]}&`
-        }
+        resString += `${key}=${config[key as keyof IUniversitiesPayload]}&`
     }
 
-    console.log('DEBUG QUERYPARAMS',resString)
+    console.log('DEBUG QUERYPARAMS', resString)
 
     return resString === '?' ? '' : resString
 }
 
 export const universitiesApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        universities: builder.query<any,IUniversitiesPayload>({
+        universities: builder.query<any, IUniversitiesPayload>({
             query: (settings) => ({
-                url:'/university' + constructUniversitiesQueryString(settings),
+                url: '/university' + constructUniversitiesQueryString(settings),
                 method: 'GET',
             }),
-            providesTags:['universities']
+            providesTags: ['universities']
         }),
-        universityDelete: builder.mutation<any,{id:string}>({
+        universityDelete: builder.mutation<any, { id: string }>({
             query: (settings) => ({
-                url:`/university/${settings.id}`,
+                url: `/university/${settings.id}`,
                 method: 'DELETE',
             }),
-            invalidatesTags:['universities']
+            invalidatesTags: ['universities']
         }),
         templateMutation: builder.mutation({
-            query: (settings:{id:number,body:never}) => ({
-                url:`someUrl${settings.id}`,
+            query: (settings: { id: number, body: never }) => ({
+                url: `someUrl${settings.id}`,
                 method: 'post',
-                headers: {
-
-                },
-                body:settings.body
+                headers: {},
+                body: settings.body
             }),
         })
     }),
-    overrideExisting:false
+    overrideExisting: false
 })
 
 export const {

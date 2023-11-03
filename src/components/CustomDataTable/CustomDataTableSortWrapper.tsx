@@ -11,7 +11,7 @@ interface IProps {
 type TSortParam = 'asc' | 'desc'
 
 interface ISortParams {
-    [key: string]: string
+    [key: string]: string | undefined
 }
 
 export const CustomDataTableSortWrapper: FC<IProps> = ({
@@ -30,9 +30,15 @@ export const CustomDataTableSortWrapper: FC<IProps> = ({
 
     useEffect(() => {
         if (!sortState) {
-            setSearchParams(
-                new URLSearchParams(Array.from(searchParams.entries()).filter((item) => item[0] !== 'sort'))
-            )
+            if (!searchParams.get('sort')) return
+            const sortParams: ISortParams = JSON.parse(searchParams.get('sort')!)
+            sortParams[column.id] = undefined
+            setSearchParams(new URLSearchParams([
+                ...Array.from(searchParams.entries()).filter((item) => item[0] !== 'sort'),
+                Object.values(sortParams).filter((item) => item !== undefined).length
+                    ? ['sort', JSON.stringify(sortParams)]
+                    : []
+            ].filter((item) => item.length)))
             return
         }
         if (!searchParams.get('sort')) {
