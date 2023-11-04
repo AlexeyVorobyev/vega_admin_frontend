@@ -2,24 +2,40 @@ import {FC, useLayoutEffect, useRef, useState} from "react";
 import {FormControl, MenuItem, Pagination, Stack, TextField, Typography} from "@mui/material";
 import {theme} from "../Theme/theme";
 import {useSearchParams} from "react-router-dom";
+import {booleanNumber} from "../functions/booleanNumber";
 
 interface IProps {
     availablePages: number,
-    perPageOptions: string[]
+    perPageOptions: string[],
+    availableElements?: number
 }
 
 export const CustomDataTableFooter: FC<IProps> = ({
                                                       availablePages,
-                                                      perPageOptions
+                                                      perPageOptions,
+                                                      availableElements
                                                   }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [page, setPage] = useState<string | null>(searchParams.get('page') || null);
     const [perPage, setPerPage] = useState<string | null>(searchParams.get('perPage') || null)
-    const savedPages = useRef<number | null>(availablePages || null)
+    const savedAvailablePages = useRef<string | null>(booleanNumber(availablePages) ? availablePages.toString() : null)
+    const savedAvailableElements = useRef<string | null>(booleanNumber(availableElements) ? availableElements!.toString() : null)
 
     useLayoutEffect(() => {
-        availablePages && (savedPages.current = availablePages)
+        if (!booleanNumber(availablePages)) {
+            return
+        }
+        if (availablePages !== Number(savedAvailablePages.current) && savedAvailablePages.current) {
+            setPage('0')
+        }
+        savedAvailablePages.current = availablePages.toString()
     }, [availablePages])
+
+    useLayoutEffect(() => {
+        if (availableElements) {
+            savedAvailableElements.current = availableElements!.toString()
+        }
+    }, [availableElements])
 
     useLayoutEffect(() => {
         if (!page) {
@@ -55,9 +71,15 @@ export const CustomDataTableFooter: FC<IProps> = ({
     return (
         <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}
                sx={{padding: theme.spacing(2)}}>
+            <Typography variant={'subtitle2'} color={theme.palette.text.primary} noWrap>
+                Всего элементов: {
+                booleanNumber(availableElements)
+                    ? availableElements
+                    : savedAvailableElements.current ||
+                    Number(savedAvailablePages.current) * Number(perPage) || ' '}
+            </Typography>
             <Stack direction={'row'} alignItems={'center'} spacing={theme.spacing(2)}>
-                <Typography variant={'subtitle2'} color={theme.palette.text.primary} noWrap minWidth={160}>Количество
-                    элементов:</Typography>
+                <Typography variant={'subtitle2'} color={theme.palette.text.primary} noWrap>На странице:</Typography>
                 <FormControl>
                     <TextField
                         value={perPage}
@@ -70,9 +92,12 @@ export const CustomDataTableFooter: FC<IProps> = ({
                     </TextField>
                 </FormControl>
             </Stack>
-            <Pagination count={availablePages || savedPages.current || 10} page={Number(page) + 1}
+            <Pagination
+                count={(booleanNumber(availablePages) ? availablePages : Number(savedAvailablePages.current) || 10) || 1}
+                page={Number(page) + 1}
+                color={'secondary'}
                 // @ts-ignore
-                        onChange={(event: any, value) => setPage((value - 1).toString())}/>
+                onChange={(event: any, value) => setPage((value - 1).toString())}/>
         </Stack>
     )
 }

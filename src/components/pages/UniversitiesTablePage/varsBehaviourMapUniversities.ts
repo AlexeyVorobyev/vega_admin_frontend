@@ -21,7 +21,8 @@ export const varsBehaviourMapUniversities = (initialVars: any) => {
     const mutatedVars = {
         ...(initialVars.page && {page: Number(initialVars.page)}),
         ...(initialVars.perPage && {size: Number(initialVars.perPage)}),
-        ...(initialVars.sort && {sort: resSort})
+        ...(initialVars.sort && {sort: resSort}),
+        ...(initialVars.simpleFilter && {titleFilter: initialVars.simpleFilter})
     }
 
     console.log('DEBUG MUTATED_VARS',mutatedVars)

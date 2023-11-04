@@ -1,11 +1,11 @@
-import {FC, useCallback, useMemo} from 'react';
+import {FC, useCallback, useMemo, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Box, CircularProgress, Divider, Stack, Typography} from "@mui/material";
+import {Box, CircularProgress, Divider, Stack, Tooltip, Typography} from "@mui/material";
 import {CustomDataTableFooter} from "./CustomDataTableFooter";
 import {useNavigate} from "react-router-dom";
 import {CustomDataTableActions} from "./CustomDataTableActions";
@@ -24,6 +24,7 @@ export interface ICustomDataTableColumn {
     format?: (value: any) => string,
     display?: boolean
     sort?: boolean
+    link?: boolean
 }
 
 export type ICustomDataTableRow = Map<string, string>
@@ -48,8 +49,10 @@ interface IProps {
     data: Object[]
     actionsConfig?: IActionsConfig
     availablePages: number,
+    availableElements?: number
     perPageOptions?: string[]
-    simpleFilter?: boolean
+    simpleFilter?: boolean,
+    columnsSelect?: boolean
 }
 
 export const CustomDataTable: FC<IProps> = ({
@@ -58,7 +61,9 @@ export const CustomDataTable: FC<IProps> = ({
                                                 actionsConfig,
                                                 availablePages,
                                                 perPageOptions = ['1', '2', '4', '8', '16', '32'],
-                                                simpleFilter = false
+                                                simpleFilter = false,
+                                                columnsSelect = false,
+                                                availableElements
                                             }) => {
 
     const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] | null => {
@@ -80,12 +85,16 @@ export const CustomDataTable: FC<IProps> = ({
         return resultArr
     }, [columns, data])
 
+    const [columnsState, setColumnsState] = useState<ICustomDataTableColumn[]>(columns)
+
     const rows = useMemo(() => FormatFlatData(columns, data), [columns, data])
     const navigate = useNavigate()
 
     return (
         <Stack sx={{height: '100%', width: '100%'}} direction={'column'} useFlexGap>
-            <CustomDataTableHeader simpleFilter={simpleFilter}/>
+            {(simpleFilter || columnsSelect) &&
+                <CustomDataTableHeader simpleFilter={simpleFilter} columnsSelect={columnsSelect}
+                                       columnsState={columnsState} setColumnsState={setColumnsState}/>}
             {!rows && (<Box sx={{
                 width: '100%',
                 height: '100%',
@@ -123,7 +132,7 @@ export const CustomDataTable: FC<IProps> = ({
                         <TableHead>
                             <TableRow>
                                 {[
-                                    ...columns.map((column) => {
+                                    ...columnsState.map((column) => {
                                         if (column.display === false) return
                                         return (
                                             <TableCell key={column.id} align={column.align}
@@ -154,12 +163,17 @@ export const CustomDataTable: FC<IProps> = ({
                                                   navigate(`${actionsConfig?.view?.path!}?id=${row.get(actionsConfig!.view!.columnName)}`)
                                               } : undefined}>
                                         {[
-                                            ...columns.map((column) => {
+                                            ...columnsState.map((column) => {
                                                 if (column.display === false) return
                                                 const value = row.get(column.id)
                                                 return (
                                                     <TableCell key={column.id} align={column.align || 'left'}>
-                                                        {value}
+                                                        {column.link
+                                                            ? <Tooltip title={'Перейти по ссылке'}>
+                                                                <a href={value}
+                                                                   onClick={(event) => event.stopPropagation()}>{value}</a>
+                                                            </Tooltip>
+                                                            : value}
                                                     </TableCell>
                                                 )
                                             }),
@@ -179,9 +193,9 @@ export const CustomDataTable: FC<IProps> = ({
             }
             <Box marginTop={'auto'} width={'100%'}>
                 <Divider/>
-                <CustomDataTableFooter availablePages={availablePages} perPageOptions={perPageOptions}/>
+                <CustomDataTableFooter availablePages={availablePages} perPageOptions={perPageOptions}
+                                       availableElements={availableElements}/>
             </Box>
         </Stack>
     )
-        ;
 }

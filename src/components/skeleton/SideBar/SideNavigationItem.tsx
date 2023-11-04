@@ -6,12 +6,14 @@ import {theme} from "../../Theme/theme";
 import {checkLocation} from "../../functions/checkLocation";
 import {LinkRouterWrapper} from "../../LinkRouterWrapper/LinkRouterWrapper";
 
+
 interface IProps {
     name: string,
     path: string | null,
     icon?: ReactNode
     isContracted: boolean
     children?: ReactNode
+    index: number
 }
 
 export const SideNavigationItem: FC<IProps> = ({
@@ -19,10 +21,13 @@ export const SideNavigationItem: FC<IProps> = ({
                                                    path,
                                                    icon,
                                                    isContracted,
-                                                   children
+                                                   children,
+                                                   index
                                                }) => {
 
-    const [open, setOpen] = useState<boolean>(false)
+    const [open, setOpen] = useState<boolean>(
+        sessionStorage.getItem(`sideNavigation${index}`) === 'true'
+    )
     const location = useLocation()
 
     const isCurrentLocation = path ? useMemo(() => checkLocation(location.pathname, path), [location, path]) : null
@@ -30,12 +35,17 @@ export const SideNavigationItem: FC<IProps> = ({
     const handleClick = path ? useCallback(() => {
         if (open) {
             if (isCurrentLocation) {
+                sessionStorage.setItem(`sideNavigation${index}`, 'false')
                 setOpen(false)
             }
         } else {
+            sessionStorage.setItem(`sideNavigation${index}`, 'true')
             setOpen(true)
         }
-    }, [location]) : useCallback(() => setOpen(!open), [open])
+    }, [location]) : useCallback(() => {
+        sessionStorage.setItem(`sideNavigation${index}`, !open ? 'true' : 'false')
+        setOpen(!open)
+    }, [open])
 
 
     return (

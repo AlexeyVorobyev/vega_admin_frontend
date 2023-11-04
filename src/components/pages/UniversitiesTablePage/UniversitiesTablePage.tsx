@@ -27,6 +27,8 @@ export const UniversitiesTablePage: FC = () => {
                              data={result?.currentData?.content}
                              availablePages={result?.currentData?.totalPages}
                              perPageOptions={['1', '2', '4', '8', '16', '32']}
+                             availableElements={result?.currentData?.totalElements}
+                             columnsSelect simpleFilter
                              actionsConfig={{
                                  view: {
                                      columnName: 'id',
@@ -38,8 +40,8 @@ export const UniversitiesTablePage: FC = () => {
                                  },
                                  delete: {
                                      columnName: 'id',
-                                     mutation:deleteUniversity,
-                                     showModal:true
+                                     mutation: deleteUniversity,
+                                     showModal: true
                                  }
                              }}/>
         </Stack>

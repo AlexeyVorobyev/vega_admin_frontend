@@ -5,19 +5,19 @@ import {sideNavigationConfig, ISideNavigationConfig} from "./sideNavigationConfi
 
 export const SideNavigation: FC = () => {
     const [isContracted, setIsContracted] = useState<boolean>(
-        (sessionStorage.getItem('sideNavigationIsContractedState') || 'contracted') === 'true'
+        sessionStorage.getItem('sideNavigationIsContractedState') === 'true'
     )
 
     const constructSideNavigation = useCallback((sideNavigationConfig: ISideNavigationConfig[]) => {
-        return sideNavigationConfig.map((item) => {
+        return sideNavigationConfig.map((item, index) => {
             if (item.routes) {
                 return (<SideNavigationItem key={item.name} name={item.name} path={item.path}
-                                            icon={item.icon} isContracted={isContracted}>
+                                            icon={item.icon} isContracted={isContracted} index={index}>
                     {constructSideNavigation(item.routes)}
                 </SideNavigationItem>)
             } else {
                 return <SideNavigationItem key={item.name} name={item.name} path={item.path}
-                                           icon={item.icon} isContracted={isContracted}/>
+                                           icon={item.icon} isContracted={isContracted} index={index}/>
             }
         })
     }, [sideNavigationConfig, isContracted])

@@ -18,8 +18,6 @@ export const CustomDataTableActions: FC<IProps> = ({
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
     const [openDialog, setOpenDialog] = useState<boolean>(false)
-
-    const open = Boolean(anchorEl)
     const navigate = useNavigate()
 
     const handleDelete = useCallback(() => {
@@ -40,10 +38,10 @@ export const CustomDataTableActions: FC<IProps> = ({
                 event.stopPropagation()
                 setAnchorEl(event.currentTarget)
             }}>
-                <OpenInNewIcon/>
+                <OpenInNewIcon color={'secondary'}/>
             </IconButton>
             <Popover
-                open={open}
+                open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
                 onClose={(event: React.MouseEvent<HTMLButtonElement>) => {
                     event.stopPropagation()
