@@ -17,3 +17,20 @@ export interface IUniversitiesPayload {
         [key: string]: ESort.ascending | ESort.descending
     }
 }
+
+export interface IUniversityEntity {
+    id: string;
+    title: string;
+    shortTitle: string;
+    description: string;
+    address: string;
+    site: string;
+    town: {
+        id: string;
+        title: string;
+    };
+    grade: string;
+    cardPhoto: string;
+    priority: number;
+    studentsTelegramChatUrl: string;
+}

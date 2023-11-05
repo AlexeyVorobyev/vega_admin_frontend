@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from "react";
+import React, {FC, ReactNode, useCallback, useEffect} from "react";
 import {Dialog, DialogTitle} from "@mui/material";
 
 interface IProps {
@@ -8,12 +8,26 @@ interface IProps {
     children: ReactNode
 }
 
-export const CustomDialog: FC<IProps> = ({
+export const AlexDialog: FC<IProps> = ({
                                              title,
                                              children,
                                              open,
                                              setOpen
                                          }) => {
+
+    const handleKeyUp = useCallback((event:KeyboardEvent) => {
+        event.stopPropagation()
+        if (event.key === 'Escape' || event.key === 'Backspace') {
+            setOpen(false)
+        }
+    },[])
+
+    useEffect(() => {
+        window.addEventListener('keyup',handleKeyUp)
+        return () => {
+            window.removeEventListener('keyup',handleKeyUp)
+        }
+    },[])
 
     return (
         <Dialog open={open}

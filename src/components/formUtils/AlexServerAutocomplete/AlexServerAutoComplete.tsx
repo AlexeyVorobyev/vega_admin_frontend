@@ -2,8 +2,8 @@ import React, {CSSProperties, useEffect, useState} from "react";
 import {Controller, useFormContext} from "react-hook-form";
 import {UseLazyQuery} from "@reduxjs/toolkit/dist/query/react/buildHooks";
 import {debounce} from "../../functions/debounce";
-import {CustomServerAutoCompleteEngine} from "./CustomServerAutoCompleteEngine";
-import {Option} from "./CustomServerAutoCompleteEngine";
+import {AlexServerAutoCompleteEngine} from "./AlexServerAutoCompleteEngine";
+import {Option} from "./AlexServerAutoCompleteEngine";
 
 interface Props {
     name:string
@@ -19,7 +19,7 @@ interface Props {
     multiple?: boolean
     style?:CSSProperties
 }
-export const CustomServerAutoComplete:React.FC<Props> =
+export const AlexServerAutoComplete:React.FC<Props> =
     ({
         name,
         defaultValue,
@@ -63,7 +63,7 @@ export const CustomServerAutoComplete:React.FC<Props> =
             defaultValue={defaultValue || ""}
             control={control}
             render={({field : {onChange, value}}) => (
-                <CustomServerAutoCompleteEngine
+                <AlexServerAutoCompleteEngine
                     value={value}
                     onChange={onChange}
                     inputValue={inputValue}

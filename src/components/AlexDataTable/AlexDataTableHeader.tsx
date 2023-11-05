@@ -1,10 +1,10 @@
 import React, {FC, useState} from "react";
 import {Divider, IconButton, Popover, Stack, Tooltip, Typography} from "@mui/material";
 import {theme} from "../Theme/theme";
-import {ICustomDataTableColumn} from "./CustomDataTable";
+import {ICustomDataTableColumn} from "./AlexDataTable";
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 import Checkbox from '@mui/material/Checkbox';
-import {CustomDataTableSimpleFilter} from "./CustomDataTableSimpleFilter";
+import {AlexDataTableSimpleFilter} from "./AlexDataTableSimpleFilter";
 
 interface IProps {
     simpleFilter: boolean
@@ -13,7 +13,7 @@ interface IProps {
     setColumnsState: React.Dispatch<React.SetStateAction<ICustomDataTableColumn[]>>
 }
 
-export const CustomDataTableHeader: FC<IProps> = ({
+export const AlexDataTableHeader: FC<IProps> = ({
                                                       simpleFilter,
                                                       columnsState,
                                                       columnsSelect,
@@ -26,7 +26,7 @@ export const CustomDataTableHeader: FC<IProps> = ({
         <Stack direction={'row'} justifyContent={'end'} spacing={theme.spacing(2)}
                padding={theme.spacing(2)} useFlexGap>
             {simpleFilter &&
-                <CustomDataTableSimpleFilter/>}
+                <AlexDataTableSimpleFilter/>}
             {columnsSelect && (<>
                 <Tooltip title={'Отображение столбцов'}>
                     <IconButton onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
@@ -47,7 +47,7 @@ export const CustomDataTableHeader: FC<IProps> = ({
                     <Stack direction={'column'} padding={theme.spacing(2)}>
                         {columnsState.map((column) => {
                             return (
-                                <Stack direction={'row'} spacing={theme.spacing(1)} alignItems={'center'}>
+                                <Stack direction={'row'} spacing={theme.spacing(1)} alignItems={'center'} key={column.id}>
                                     <Checkbox checked={column.display !== false}
                                               onClick={() => {
                                                   if (column.display === false) {

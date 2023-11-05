@@ -1,4 +1,4 @@
-import {ICustomDataTableColumn} from "../../CustomDataTable/CustomDataTable";
+import {ICustomDataTableColumn} from "../../AlexDataTable/AlexDataTable";
 
 export const TutorsTableColumns:ICustomDataTableColumn[] = [
     {

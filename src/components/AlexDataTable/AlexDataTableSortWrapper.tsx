@@ -1,6 +1,6 @@
 import {FC, ReactNode, useEffect, useLayoutEffect, useState} from "react";
-import {ICustomDataTableColumn} from "./CustomDataTable";
-import {TableSortLabel} from "@mui/material";
+import {ICustomDataTableColumn} from "./AlexDataTable";
+import {TableSortLabel, Tooltip} from "@mui/material";
 import {useSearchParams} from "react-router-dom";
 
 interface IProps {
@@ -14,7 +14,7 @@ interface ISortParams {
     [key: string]: string | undefined
 }
 
-export const CustomDataTableSortWrapper: FC<IProps> = ({
+export const AlexDataTableSortWrapper: FC<IProps> = ({
                                                            column,
                                                            children
                                                        }) => {
@@ -57,14 +57,16 @@ export const CustomDataTableSortWrapper: FC<IProps> = ({
     }, [sortState])
 
     return (
-        <TableSortLabel direction={sortState || undefined} active={Boolean(sortState)}
-                        onClick={() => {
-                            setSortState((prev) => {
-                                if (!prev) return 'asc'
-                                return prev === 'asc' ? 'desc' : prev === 'desc' ? null : 'asc'
-                            })
-                        }}>
-            {children}
-        </TableSortLabel>
+        <Tooltip title={'Сортировка'}>
+            <TableSortLabel direction={sortState || undefined} active={Boolean(sortState)}
+                            onClick={() => {
+                                setSortState((prev) => {
+                                    if (!prev) return 'asc'
+                                    return prev === 'asc' ? 'desc' : prev === 'desc' ? null : 'asc'
+                                })
+                            }}>
+                {children}
+            </TableSortLabel>
+        </Tooltip>
     )
 }

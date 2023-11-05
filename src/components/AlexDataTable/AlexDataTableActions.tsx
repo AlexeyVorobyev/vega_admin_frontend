@@ -1,17 +1,17 @@
 import React, {FC, useCallback, useState} from "react";
-import {IActionsConfig, ICustomDataTableRow} from "./CustomDataTable";
+import {IActionsConfig, ICustomDataTableRow} from "./AlexDataTable";
 import {Button, IconButton, Popover, Stack, Typography} from "@mui/material";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {theme} from "../Theme/theme";
 import {useNavigate} from "react-router-dom";
-import {CustomDialog} from "../CustomDialog/CustomDialog";
+import {AlexDialog} from "../AlexDialog/AlexDialog";
 
 interface IProps {
     actionsConfig: IActionsConfig
     row: ICustomDataTableRow
 }
 
-export const CustomDataTableActions: FC<IProps> = ({
+export const AlexDataTableActions: FC<IProps> = ({
                                                        actionsConfig,
                                                        row,
                                                    }) => {
@@ -89,7 +89,7 @@ export const CustomDataTableActions: FC<IProps> = ({
                 </Stack>
             </Popover>
             {actionsConfig.delete?.showModal &&
-                (<CustomDialog title={'Подтвердите удаление'} open={openDialog} setOpen={setOpenDialog}>
+                (<AlexDialog title={'Подтвердите удаление'} open={openDialog} setOpen={setOpenDialog}>
                     <Stack direction={'row'} spacing={theme.spacing(2)} padding={theme.spacing(2)}>
                         <Button
                             sx={{width: '140px'}}
@@ -109,6 +109,6 @@ export const CustomDataTableActions: FC<IProps> = ({
                                         color={theme.palette.neutral.notContrastText}>Отмена</Typography>
                         </Button>
                     </Stack>
-                </CustomDialog>)}
+                </AlexDialog>)}
         </>)
 }

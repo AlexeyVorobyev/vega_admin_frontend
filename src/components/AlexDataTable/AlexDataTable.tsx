@@ -1,27 +1,26 @@
-import {FC, useCallback, useMemo, useState} from 'react';
+import {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {Box, CircularProgress, Divider, Stack, Tooltip, Typography} from "@mui/material";
-import {CustomDataTableFooter} from "./CustomDataTableFooter";
+import {Box, CircularProgress, Divider, Stack, Typography} from "@mui/material";
+import {AlexDataTableFooter} from "./AlexDataTableFooter";
 import {useNavigate} from "react-router-dom";
-import {CustomDataTableActions} from "./CustomDataTableActions";
+import {AlexDataTableActions} from "./AlexDataTableActions";
 import {MutationTrigger} from "@reduxjs/toolkit/dist/query/react/buildHooks";
-import {CustomDataTableHeader} from "./CustomDataTableHeader";
-import {CustomDataTableSortWrapper} from "./CustomDataTableSortWrapper";
+import {AlexDataTableHeader} from "./AlexDataTableHeader";
+import {AlexDataTableSortWrapper} from "./AlexDataTableSortWrapper";
 
-//TODO FILTERS
-//TODO SIMPLEFILTER AND HEADER
+//TODO CUSTOM FILTERS COMPONENT ?
 
 export interface ICustomDataTableColumn {
     id: string,
     label: string,
     align?: "center" | "left" | "right" | "inherit" | "justify",
     minWidth?: number,
-    format?: (value: any) => string,
+    format?: (value: any) => any,
     display?: boolean
     sort?: boolean
     link?: boolean
@@ -53,9 +52,10 @@ interface IProps {
     perPageOptions?: string[]
     simpleFilter?: boolean,
     columnsSelect?: boolean
+    footer?: boolean
 }
 
-export const CustomDataTable: FC<IProps> = ({
+export const AlexDataTable: FC<IProps> = ({
                                                 columns,
                                                 data,
                                                 actionsConfig,
@@ -63,7 +63,8 @@ export const CustomDataTable: FC<IProps> = ({
                                                 perPageOptions = ['1', '2', '4', '8', '16', '32'],
                                                 simpleFilter = false,
                                                 columnsSelect = false,
-                                                availableElements
+                                                availableElements,
+                                                footer= false
                                             }) => {
 
     const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] | null => {
@@ -75,7 +76,7 @@ export const CustomDataTable: FC<IProps> = ({
                 if (!item.hasOwnProperty(column.id)) continue
                 if (typeof item[column.id as keyof Object] !== 'string' || column.format) {
                     if (!column.format) continue
-                    resultFlatRow.set(column.id, column.format(item[column.id as keyof Object]))
+                    resultFlatRow.set(column.id, column.format(item))
                 } else {
                     resultFlatRow.set(column.id, item[column.id as keyof Object])
                 }
@@ -85,7 +86,15 @@ export const CustomDataTable: FC<IProps> = ({
         return resultArr
     }, [columns, data])
 
-    const [columnsState, setColumnsState] = useState<ICustomDataTableColumn[]>(columns)
+    const [columnsState, setColumnsState] = useState<ICustomDataTableColumn[]>(
+        sessionStorage.getItem(`columnsDataBase${location.pathname}`)
+            ? JSON.parse(sessionStorage.getItem(`columnsDataBase${location.pathname}`)!) as ICustomDataTableColumn[]
+            : columns
+    )
+
+    useEffect(() => {
+        sessionStorage.setItem(`columnsDataBase${location.pathname}`, JSON.stringify(columnsState))
+    }, [columnsState])
 
     const rows = useMemo(() => FormatFlatData(columns, data), [columns, data])
     const navigate = useNavigate()
@@ -93,8 +102,8 @@ export const CustomDataTable: FC<IProps> = ({
     return (
         <Stack sx={{height: '100%', width: '100%'}} direction={'column'} useFlexGap>
             {(simpleFilter || columnsSelect) &&
-                <CustomDataTableHeader simpleFilter={simpleFilter} columnsSelect={columnsSelect}
-                                       columnsState={columnsState} setColumnsState={setColumnsState}/>}
+                <AlexDataTableHeader simpleFilter={simpleFilter} columnsSelect={columnsSelect}
+                                     columnsState={columnsState} setColumnsState={setColumnsState}/>}
             {!rows && (<Box sx={{
                 width: '100%',
                 height: '100%',
@@ -139,9 +148,9 @@ export const CustomDataTable: FC<IProps> = ({
                                                        style={{minWidth: column.minWidth}}>
                                                 {column.sort === false ?
                                                     column.label
-                                                    : (<CustomDataTableSortWrapper column={column}>
+                                                    : (<AlexDataTableSortWrapper column={column}>
                                                         {column.label}
-                                                    </CustomDataTableSortWrapper>)}
+                                                    </AlexDataTableSortWrapper>)}
                                             </TableCell>
                                         )
                                     }),
@@ -168,18 +177,13 @@ export const CustomDataTable: FC<IProps> = ({
                                                 const value = row.get(column.id)
                                                 return (
                                                     <TableCell key={column.id} align={column.align || 'left'}>
-                                                        {column.link
-                                                            ? <Tooltip title={'Перейти по ссылке'}>
-                                                                <a href={value}
-                                                                   onClick={(event) => event.stopPropagation()}>{value}</a>
-                                                            </Tooltip>
-                                                            : value}
+                                                        {value}
                                                     </TableCell>
                                                 )
                                             }),
                                             actionsConfig ?
                                                 (<TableCell key={'actions'} align={'left'}>
-                                                    <CustomDataTableActions actionsConfig={actionsConfig} row={row}/>
+                                                    <AlexDataTableActions actionsConfig={actionsConfig} row={row}/>
                                                 </TableCell>)
                                                 : undefined
                                         ]}
@@ -191,11 +195,11 @@ export const CustomDataTable: FC<IProps> = ({
                 </TableContainer>) :
                 undefined
             }
-            <Box marginTop={'auto'} width={'100%'}>
+            {footer && (<Box marginTop={'auto'} width={'100%'}>
                 <Divider/>
-                <CustomDataTableFooter availablePages={availablePages} perPageOptions={perPageOptions}
-                                       availableElements={availableElements}/>
-            </Box>
+                <AlexDataTableFooter availablePages={availablePages} perPageOptions={perPageOptions}
+                                     availableElements={availableElements}/>
+            </Box>)}
         </Stack>
     )
 }

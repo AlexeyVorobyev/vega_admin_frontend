@@ -10,7 +10,7 @@ interface IProps {
     availableElements?: number
 }
 
-export const CustomDataTableFooter: FC<IProps> = ({
+export const AlexDataTableFooter: FC<IProps> = ({
                                                       availablePages,
                                                       perPageOptions,
                                                       availableElements

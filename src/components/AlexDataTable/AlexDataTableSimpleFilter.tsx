@@ -4,7 +4,7 @@ import {useSearchParams} from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 import {debounce} from "../functions/debounce";
 
-export const CustomDataTableSimpleFilter: FC = () => {
+export const AlexDataTableSimpleFilter: FC = () => {
 
     const [simpleFilterState, setSimpleFilterState] = useState<string | null>(null)
     const [middleWareFilterState, setMiddleWareFilterState] = useState<string | null>(null)

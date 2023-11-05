@@ -15,7 +15,7 @@ interface Props {
     errorText?:string
     hidden?:boolean
 }
-const CustomInput:React.FC<Props> = ({
+const AlexInput:React.FC<Props> = ({
     name,
     defaultValue,
     label,
@@ -70,4 +70,4 @@ const CustomInput:React.FC<Props> = ({
     )
 }
 
-export {CustomInput}
+export {AlexInput}

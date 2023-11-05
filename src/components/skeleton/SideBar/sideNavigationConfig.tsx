@@ -29,9 +29,7 @@ export const sideNavigationConfig: ISideNavigationConfig[] = [
         routes: [
             {path: 'customization/tutors', name: 'Настройка репетиторов', icon: <PersonIcon/>},
 
-            {path: 'customization/universities', name: 'Настройка ВУЗОВ', icon: <SchoolOutlinedIcon/>},
-
-            {path: 'customization/colleges', name: 'Настройка ССУЗОВ', icon: <SchoolOutlinedIcon/>},
+            {path: 'customization/universities', name: 'Настройка учебных заведений', icon: <SchoolOutlinedIcon/>},
 
             {path: 'customization/tests', name: 'Настройка тестов', icon: <QuizIcon/>}
         ]

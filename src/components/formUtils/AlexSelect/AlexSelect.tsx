@@ -17,7 +17,7 @@ interface Props {
     errorText?: string
 }
 
-export const CustomSelect: React.FC<Props> = ({
+export const AlexSelect: React.FC<Props> = ({
                                                 name,
                                                 defaultValue,
                                                 label,

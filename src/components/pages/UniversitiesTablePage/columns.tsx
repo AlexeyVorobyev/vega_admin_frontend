@@ -1,5 +1,5 @@
-import {ICustomDataTableColumn} from "../../CustomDataTable/CustomDataTable";
-import {EGrade} from "../../../redux/api/types/universities";
+import {ICustomDataTableColumn} from "../../AlexDataTable/AlexDataTable";
+import {EGrade, IUniversityEntity} from "../../../redux/api/types/universities";
 import {Tooltip} from "@mui/material";
 
 export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
@@ -22,22 +22,49 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
     {
         id: 'site',
         label: 'Сайт',
-        format: (value: any) => (
+        format: (value: IUniversityEntity) => (
             <Tooltip title={'Перейти по ссылке'}>
-                <a href={value}
-                   onClick={(event) => event.stopPropagation()}>{value}</a>
+                <a href={value.site}
+                   onClick={(event) => event.stopPropagation()}>{value.site}</a>
             </Tooltip>
         )
     },
     {
+        id: 'studentsTelegramChatUrl',
+        label: 'Cтуденческий чат, Телеграм',
+        format: (value: IUniversityEntity) => (
+            <Tooltip title={'Перейти по ссылке'}>
+                <a href={value.studentsTelegramChatUrl}
+                   onClick={(event) => event.stopPropagation()}>{value.studentsTelegramChatUrl}</a>
+            </Tooltip>
+        ),
+        display:false
+    },
+    {
         id: 'town',
         label: 'Город',
-        format: (value: any) => value.title
+        format: (value: IUniversityEntity) => value.town.title
     },
     {
         id: 'grade',
-        label: 'Курс',
-        format: (value: any) => value === EGrade.High ? 'Старший' : 'Младший'
-    }
+        label: 'Вид',
+        format: (value: IUniversityEntity) => value.grade === EGrade.High ? 'ВУЗ' : 'ССУЗ',
+    },
+    {
+        id: 'description',
+        label: 'Описание',
+        display:false
+    },
+    {
+        id: 'cardPhoto',
+        label: 'Фотография',
+        format: (value: IUniversityEntity) => (
+            <Tooltip title={'Открыть фото в новом окне'}>
+                <a href={value.cardPhoto}
+                   onClick={(event) => event.stopPropagation()}>{value.cardPhoto}</a>
+            </Tooltip>
+        ),
+        display:false
+    },
 ]
 

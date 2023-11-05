@@ -1,5 +1,5 @@
 import {FC, useCallback, useMemo} from "react";
-import {Link, useLocation} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import {Breadcrumbs, Typography} from "@mui/material";
 import {constructPathLink} from "../../functions/constructPathLink";
 import {theme} from "../../Theme/theme";
@@ -32,24 +32,25 @@ export const CustomBreadCrumbs: FC = () => {
         }
 
         return breadCrumbsConfig.map((item) => <LinkRouterWrapper
+            tooltip
             key={item.linkTo}
             to={!forbiddenLinks.includes(item.linkTo) ? item.linkTo : null}>
             <Typography variant={'subtitle2'}
-                        color={checkLocation(location.pathname, item.linkTo) ? theme.palette.secondary.main : '#000000'}
+                        color={checkLocation(location.pathname, item.linkTo) ? theme.palette.secondary.main : !forbiddenLinks.includes(item.linkTo) ? '#000000' : '#555555'}
                         height={'24px'}>{item.name}</Typography>
         </LinkRouterWrapper>)
     }, [pathArr])
 
     return (
         <Breadcrumbs>
-            <Link
+            <LinkRouterWrapper
                 to={'/'}
-                key={'/'}
-                style={{textDecoration: 'none'}}>
+                tooltip
+                key={'/'}>
                 <Typography variant={'subtitle2'}
                             color={checkLocation(location.pathname, '/') ? theme.palette.secondary.main : '#000000'}
                             height={'24px'}>VEGA</Typography>
-            </Link>
+            </LinkRouterWrapper>
             {constructBreadCrumbs()}
         </Breadcrumbs>
     )
