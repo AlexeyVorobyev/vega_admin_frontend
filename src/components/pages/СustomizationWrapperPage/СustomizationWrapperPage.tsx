@@ -1,11 +1,11 @@
 import {FC, ReactNode, useCallback, useMemo} from "react";
-import {useLocation, useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {Box, Button, Divider, Stack, Typography} from "@mui/material";
 import {theme} from "../../Theme/theme";
-import {customizationWrapperPageNameMap} from "./customizationWrapperPageNameMap";
 import {LinkRouterWrapper} from "../../LinkRouterWrapper/LinkRouterWrapper";
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import {AlexDialogButton} from "../../AlexDialog/AlexDialogButton";
+import {useUniversityDeleteMutation} from "../../../redux/api/universities.api";
 
 export enum EPageType {
     edit = 'edit',
@@ -15,13 +15,35 @@ export enum EPageType {
 
 interface IProps {
     children: ReactNode,
-    namespace:string
+    namespace: string
 }
 
-export const CustomizationWrapperPage: FC<IProps> = ({children,namespace}) => {
+export const CustomizationWrapperPage: FC<IProps> = ({children, namespace}) => {
     const location = useLocation()
     const pageState = useMemo(() => location.pathname.split('/')[location.pathname.split('/').length - 1], [location])
     const [searchParams] = useSearchParams()
+
+    const navigate = useNavigate()
+    const [deleteUniversity] = useUniversityDeleteMutation()
+    const customizationWrapperPageNameMap = useMemo(() => new Map([
+        ['universities',
+            {
+                deleteQuery: (id: string) => {
+                    console.log(id)
+                    deleteUniversity({id: id})
+                        .then((response) => {
+                            console.log(response)
+                            navigate('./.')
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                },
+                table: 'новое учебное заведение',
+                view: 'учебное заведение'
+            }
+        ]
+    ]), [])
 
     const SwitchRender = useCallback(() => {
         switch (pageState) {
@@ -67,10 +89,10 @@ export const CustomizationWrapperPage: FC<IProps> = ({children,namespace}) => {
                                     ),
                                     functionsAssign: {
                                         'cancelButton': {
-                                            close:true
+                                            close: true
                                         },
                                         'confirmButton': {
-                                            close:true,
+                                            close: true,
                                             function: () => customizationWrapperPageNameMap.get(namespace)!.deleteQuery(searchParams.get('id')!)
                                         }
                                     }

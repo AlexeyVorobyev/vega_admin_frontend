@@ -24,8 +24,9 @@ export const AlexDataTableSortWrapper: FC<IProps> = ({
 
     useLayoutEffect(() => {
         let sortParams: ISortParams = JSON.parse(searchParams.get('sort') || '{}')
-        if (!sortParams.hasOwnProperty(column.id)) return
-        setSortState(sortParams[column.id] as TSortParam)
+        if (sortParams.hasOwnProperty(column.id)) {
+            setSortState(sortParams[column.id] as TSortParam)
+        }
     }, [searchParams])
 
     useEffect(() => {

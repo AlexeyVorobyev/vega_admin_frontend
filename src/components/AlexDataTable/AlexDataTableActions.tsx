@@ -12,25 +12,28 @@ interface IProps {
 }
 
 export const AlexDataTableActions: FC<IProps> = ({
-                                                       actionsConfig,
-                                                       row,
-                                                   }) => {
+                                                     actionsConfig,
+                                                     row,
+                                                 }) => {
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const navigate = useNavigate()
 
     const handleDelete = useCallback(() => {
-        actionsConfig.delete?.mutation!({id:row.get(actionsConfig.delete?.columnName)})
+        actionsConfig.delete?.mutation!({id: row.get(actionsConfig.delete?.columnName)})
             .then((response) => {
                 console.log(response)
+                if (response.hasOwnProperty('error')) {
+                    throw new Error('ыыыы')
+                }
                 setOpenDialog(false)
             })
             .catch((error) => {
                 console.log(error)
                 setOpenDialog(false)
             })
-    },[actionsConfig])
+    }, [actionsConfig])
 
     return (
         <>
@@ -73,7 +76,8 @@ export const AlexDataTableActions: FC<IProps> = ({
                         </Button>)}
                     {actionsConfig.delete &&
                         (<Button
-                            variant={'text'}
+                            variant={'contained'}
+                            color={'error'}
                             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                                 event.stopPropagation()
                                 if (actionsConfig.delete?.showModal) {
@@ -84,7 +88,7 @@ export const AlexDataTableActions: FC<IProps> = ({
                                     setAnchorEl(null)
                                 }
                             }}>
-                            <Typography variant={'button'} color={theme.palette.text.primary}>Удалить</Typography>
+                            <Typography variant={'button'} color={theme.palette.error.contrastText}>Удалить</Typography>
                         </Button>)}
                 </Stack>
             </Popover>

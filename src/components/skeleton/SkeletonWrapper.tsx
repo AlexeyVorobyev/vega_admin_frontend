@@ -3,6 +3,7 @@ import {Box, Stack, Typography} from "@mui/material";
 import {SideNavigation} from "./SideBar/SideNavigation";
 import {theme} from "../Theme/theme";
 import {PageWrapper} from "./PageWrapper";
+import {ErrorBoundary} from "./ErrorBoundary/ErrorBoundary";
 
 interface IProps {
     children:ReactNode
@@ -26,7 +27,9 @@ export const SkeletonWrapper:FC<IProps> = ({children}) => {
                 <SideNavigation/>
                 <Box sx={{flex:'1', height:'100%',width:'0'}}>
                     <PageWrapper>
-                        {children}
+                        <ErrorBoundary>
+                            {children}
+                        </ErrorBoundary>
                     </PageWrapper>
                 </Box>
             </Stack>

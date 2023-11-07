@@ -41,6 +41,7 @@ export const AlexImageView: FC<IProps> = ({
                      style={{
                          objectFit: 'cover',
                          width: '100%',
+                         height:'100%',
                          maxWidth: loaded && !error ? '100vw' : 0,
                          maxHeight: loaded && !error ? '100vh' : 0
                      }}/>

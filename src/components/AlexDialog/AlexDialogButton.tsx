@@ -36,7 +36,9 @@ export const AlexDialogButton: FC<IProps> = ({button, dialog}) => {
                 })
             }
 
-            if (!reactElement.props.children) return React.cloneElement(reactElement)
+            if (!reactElement.props.children) {
+                return React.cloneElement(reactElement)
+            }
             if (reactElement.props.children.length && typeof reactElement.props.children !== 'string') {
                 reactElement = React.cloneElement(reactElement, {
                     children: reactElement.props.children.map((child: ReactElement) => dfs(child))
