@@ -13,7 +13,7 @@ export const TutorsTablePage: FC = () => {
 
     return (
         <Stack height={'100%'} width={'100%'} direction={'column'} spacing={2}>
-            <AlexDataTable columns={TutorsTableColumns} data={mockData || []}/>
+            {/*<AlexDataTable columns={TutorsTableColumns} data={mockData || []}/>*/}
         </Stack>
     )
 }
