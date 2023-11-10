@@ -27,17 +27,6 @@ export const UniversitiesCard: FC = () => {
             display: 'flex',
             flex: 1,
             overflowY: 'scroll',
-            "&::-webkit-scrollbar": {
-                width: 5,
-                height: 5
-            },
-            "&::-webkit-scrollbar-track": {
-                backgroundColor: null
-            },
-            "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "#b2b2b2",
-                borderRadius: 2
-            },
         }}>
             {(isLoading || isFetching || !isSuccess) && (<Box sx={{
                 width: '100%',

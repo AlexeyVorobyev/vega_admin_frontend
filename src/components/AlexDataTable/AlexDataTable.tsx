@@ -131,17 +131,6 @@ export const AlexDataTable: FC<IProps> = ({
             {(rows && rows.length) ? (<TableContainer sx={{
                     width: '100%',
                     height: '100%',
-                    "&::-webkit-scrollbar": {
-                        width: 5,
-                        height: 5
-                    },
-                    "&::-webkit-scrollbar-track": {
-                        backgroundColor: null
-                    },
-                    "&::-webkit-scrollbar-thumb": {
-                        backgroundColor: "#b2b2b2",
-                        borderRadius: 2
-                    },
                 }}>
                     <Table stickyHeader>
                         <TableHead>

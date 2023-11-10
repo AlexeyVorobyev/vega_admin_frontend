@@ -59,7 +59,12 @@ export const UniversitiesForm: FC<IProps> = ({
         updateUniversity({id: searchParams.get('id')!, body: data})
             .then((response) => {
                 console.log(DEBUG_PREFIX, 'promise response', response)
-                navigate(searchParams.get('from') || './../table')
+                if (searchParams.get('from')) {
+                    navigate(JSON.parse(searchParams.get('from')!))
+                }
+                else {
+                    navigate('./../table')
+                }
             })
     }
 
@@ -68,7 +73,12 @@ export const UniversitiesForm: FC<IProps> = ({
         addUniversity({body: data})
             .then((response) => {
                 console.log(DEBUG_PREFIX, 'promise response', response)
-                navigate(searchParams.get('from') || './../table')
+                if (searchParams.get('from')) {
+                    navigate(JSON.parse(searchParams.get('from')!))
+                }
+                else {
+                    navigate('./../table')
+                }
             })
     }
 

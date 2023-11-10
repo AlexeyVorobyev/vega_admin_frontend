@@ -34,7 +34,12 @@ export const CustomizationPage: FC = () => {
                 deleteQuery: (id: string) => {
                     deleteUniversity({id: id})
                         .then(() => {
-                            navigate('./../table')
+                            if (searchParams.get('from')) {
+                                navigate(JSON.parse(searchParams.get('from')!))
+                            }
+                            else {
+                                navigate('./../table')
+                            }
                         })
                 },
                 [EPageType.table]: {
@@ -56,7 +61,7 @@ export const CustomizationPage: FC = () => {
                 },
             }
         ]
-    ]), [])
+    ]), [searchParams])
 
     const SwitchRender = useCallback(() => {
         switch (pageState) {
