@@ -38,7 +38,7 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
                    onClick={(event) => event.stopPropagation()}>{value.studentsTelegramChatUrl}</a>
             </Tooltip>
         ),
-        display:false
+        display: false
     },
     {
         id: 'town',
@@ -53,7 +53,7 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
     {
         id: 'description',
         label: 'Описание',
-        display:false
+        display: false
     },
     {
         id: 'cardPhoto',
@@ -64,7 +64,13 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
                    onClick={(event) => event.stopPropagation()}>{value.cardPhoto}</a>
             </Tooltip>
         ),
-        display:false
+        display: false
+    },
+    {
+        id: 'priority',
+        label: 'Приоритет',
+        format: (value: IUniversityEntity) => value.priority.toString(),
+        display: false
     },
 ]
 

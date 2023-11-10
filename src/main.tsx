@@ -11,6 +11,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './index.scss'
+import {ToastProvider} from "./components/ToastProvider/ToastProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
@@ -19,7 +20,9 @@ root.render(
         <Provider store={store}>
             <ThemeProvider theme={theme}>
                 <BrowserRouter>
-                    <App/>
+                    <ToastProvider>
+                        <App/>
+                    </ToastProvider>
                 </BrowserRouter>
             </ThemeProvider>
         </Provider>

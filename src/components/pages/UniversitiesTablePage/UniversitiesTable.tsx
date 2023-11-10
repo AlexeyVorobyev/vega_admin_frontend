@@ -2,10 +2,9 @@ import {FC, useEffect} from "react";
 import {AlexDataTable} from "../../AlexDataTable/AlexDataTable";
 import {UniversitiesTableColumns} from "./columns";
 import {useLazyUniversitiesQuery, useUniversityDeleteMutation} from "../../../redux/api/universities.api";
-import {useLocation} from "react-router-dom";
 import {usePageState} from "../../functions/usePageState";
 import {varsBehaviourMapUniversities} from "./varsBehaviourMapUniversities";
-import {EPageType} from "../СustomizationWrapperPage/СustomizationWrapperPage";
+import {EPageType} from "../СustomizationWrapperPage/СustomizationPage";
 
 export const UniversitiesTable: FC = () => {
     const [lazyUniversitiesQuery, result] = useLazyUniversitiesQuery()
@@ -19,7 +18,6 @@ export const UniversitiesTable: FC = () => {
         variables && lazyUniversitiesQuery(variables)
     }, [variables])
 
-    const location = useLocation()
 
     return (
         <AlexDataTable columns={UniversitiesTableColumns}
@@ -31,11 +29,11 @@ export const UniversitiesTable: FC = () => {
                        actionsConfig={{
                              view: {
                                  columnName: 'id',
-                                 path: `${location.pathname}/${EPageType.view}`
+                                 path: `./../${EPageType.view}`
                              },
                              edit: {
                                  columnName: 'id',
-                                 path: `${location.pathname}/${EPageType.edit}`
+                                 path: `./../${EPageType.edit}`
                              },
                              delete: {
                                  columnName: 'id',

@@ -55,6 +55,9 @@ interface IProps {
     footer?: boolean
 }
 
+const DEBUG = true
+const DEBUG_PREFIX = 'ALEX_DATA_TABLE'
+
 export const AlexDataTable: FC<IProps> = ({
                                                 columns,
                                                 data,
@@ -66,6 +69,8 @@ export const AlexDataTable: FC<IProps> = ({
                                                 availableElements,
                                                 footer= false
                                             }) => {
+
+    DEBUG && console.log(DEBUG_PREFIX,'DATA',data)
 
     const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] | null => {
         if (!data) return null

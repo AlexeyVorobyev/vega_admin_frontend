@@ -18,6 +18,7 @@ export const PageWrapper: FC<IProps> = ({
                 width: '100%',
                 height: '100%',
                 padding: theme.spacing(3),
+                paddingBottom: 0,
                 boxSizing: 'border-box'
             }}>
             <CustomBreadCrumbs/>
@@ -25,7 +26,8 @@ export const PageWrapper: FC<IProps> = ({
                 elevation={2}
                 sx={{
                     height: '100%',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    borderRadius:'5px 5px 0 0',
                 }}>
                 {children}
             </Paper>

@@ -34,3 +34,16 @@ export interface IUniversityEntity {
     priority: number;
     studentsTelegramChatUrl: string;
 }
+
+export interface IUniversityPostPayload {
+    title: string
+    shortTitle: string
+    description: string
+    address: string
+    site: string
+    town: string
+    grade: EGrade.High | EGrade.Middle
+    cardPhoto?: string
+    priority: number
+    studentsTelegramChatUrl?: string
+}

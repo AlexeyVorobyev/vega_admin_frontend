@@ -4,29 +4,34 @@ import {Controller, useFormContext} from "react-hook-form";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 interface Props {
-    name:string
-    defaultValue?:string
-    label?:string
+    name: string
+    defaultValue?: string
+    label?: string
     required?: boolean
-    validateFunctions?:{
-        [key: string]:(valueToCheck:string) => boolean | string
+    validateFunctions?: {
+        [key: string]: (valueToCheck: string) => boolean | string
     }
     error?: boolean,
-    errorText?:string
-    hidden?:boolean
+    errorText?: string
+    hidden?: boolean
+    multiline?: boolean
+    maxRows?: number
 }
-const AlexInput:React.FC<Props> = ({
-    name,
-    defaultValue,
-    label,
-    required = false,
-    validateFunctions = undefined,
-    error = false,
-    errorText = undefined,
-    hidden = false
-}) => {
 
-    const { control } = useFormContext()
+const AlexInput: React.FC<Props> = ({
+                                        name,
+                                        defaultValue,
+                                        label,
+                                        required = false,
+                                        validateFunctions = undefined,
+                                        error = false,
+                                        errorText = undefined,
+                                        hidden = false,
+                                        multiline = false,
+                                        maxRows
+                                    }) => {
+
+    const {control} = useFormContext()
 
     const [showPassword, setShowPassword] = useState<boolean>(!hidden);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -37,18 +42,22 @@ const AlexInput:React.FC<Props> = ({
             name={name}
             defaultValue={defaultValue}
             control={control}
-            rules={{validate:{
-                    required:required ? (value:string) => value?.length > 0 || 'обязательное поле' : () => true,
+            rules={{
+                validate: {
+                    required: required ? (value: string) => value?.length > 0 || 'обязательное поле' : () => true,
                     ...validateFunctions,
-                }}}
-            render={({field : {onChange, value}}) => (
+                }
+            }}
+            render={({field: {onChange, value}}) => (
                 <FormControl fullWidth>
                     <TextField
                         type={showPassword ? "text" : "password"}
                         label={error && errorText ? `${label}, ${errorText}` : label}
                         value={value}
-                        onChange={(event:any) => onChange(event.target.value)}
+                        onChange={(event: any) => onChange(event.target.value)}
                         error={error}
+                        multiline={multiline}
+                        maxRows={maxRows}
                         InputProps={{
                             endAdornment: hidden ? (
                                 <InputAdornment position="end">
@@ -57,7 +66,7 @@ const AlexInput:React.FC<Props> = ({
                                         onClick={handleClickShowPassword}
                                         onMouseDown={handleMouseDownPassword}
                                     >
-                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        {showPassword ? <Visibility/> : <VisibilityOff/>}
                                     </IconButton>
                                 </InputAdornment>
                             ) : null

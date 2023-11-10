@@ -1,11 +1,14 @@
 import {isRejectedWithValue} from '@reduxjs/toolkit'
 import type {Middleware} from '@reduxjs/toolkit'
+import {toast} from "react-toastify";
+import {toastSettings} from "../../components/ToastProvider/ToastProvider";
 
-export const rtkQueryErrorLogger: Middleware =
+export const errorMiddleware: Middleware =
     () => (next) => (action) => {
         if (isRejectedWithValue(action)) {
             console.log('REJECTED', action)
-            //toast.warn({ title: 'Async error!', message: action.error.data.message })
+            const toastPayload = toastSettings.get('CONNECTION_LOST')!
+            toast.error(toastPayload.message,toastPayload.properties)
         }
 
         return next(action)

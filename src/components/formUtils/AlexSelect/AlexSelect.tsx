@@ -35,13 +35,13 @@ export const AlexSelect: React.FC<Props> = ({
             control={control}
             rules={{
                 validate: {
-                    required: required ? (value: string) => value?.length > 0 || 'required field' : () => true,
+                    required: required ? (value: string) => value?.length > 0 || 'обязательное поле' : () => true,
                 }
             }}
             render={({field: {onChange, value}}) => (
                 <FormControl fullWidth>
                     <TextField
-                        value={value?.id}
+                        value={value?.id || ''}
                         label={error && errorText ? `${label}, ${errorText}` : label}
                         error={error}
                         onChange={onChange}

@@ -1,7 +1,7 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {reducer as userReducer} from "./user/user.slice";
 import {api} from "../api/api";
-import {rtkQueryErrorLogger} from "../api/errorMiddleware";
+import {errorMiddleware} from "../api/errorMiddleware";
 
 const reducers = combineReducers({
     user:userReducer,
@@ -10,7 +10,7 @@ const reducers = combineReducers({
 
 export const store = configureStore({
     reducer:reducers,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([api.middleware,rtkQueryErrorLogger])
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([api.middleware,errorMiddleware])
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

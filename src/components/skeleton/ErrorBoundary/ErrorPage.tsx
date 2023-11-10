@@ -11,7 +11,7 @@ export const ErrorPage: FC = () => {
             <Typography variant={'h3'}>На странице произошла какая-то ошибка :(</Typography>
             <Typography variant={'h4'}>Обратитесь к администратору</Typography>
             <LinkRouterWrapper to={'/'}>
-                <Button variant={'contained'}>
+                <Button variant={'contained'} onClick={() => setTimeout(() => window.location.reload(),1)}>
                     <Typography variant={'button'}>Вернуться на главную</Typography>
                 </Button>
             </LinkRouterWrapper>

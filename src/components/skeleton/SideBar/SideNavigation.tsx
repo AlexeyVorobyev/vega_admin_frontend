@@ -2,22 +2,21 @@ import {FC, useCallback, useState} from "react";
 import {List, Stack, Switch, Tooltip} from "@mui/material";
 import {SideNavigationItem} from "./SideNavigationItem";
 import {sideNavigationConfig, ISideNavigationConfig} from "./sideNavigationConfig";
+import {theme} from "../../Theme/theme";
 
 export const SideNavigation: FC = () => {
-    const [isContracted, setIsContracted] = useState<boolean>(
-        sessionStorage.getItem('sideNavigationIsContractedState') === 'true'
-    )
+    const [isContracted, setIsContracted] = useState<boolean>(true)
 
     const constructSideNavigation = useCallback((sideNavigationConfig: ISideNavigationConfig[]) => {
-        return sideNavigationConfig.map((item, index) => {
+        return sideNavigationConfig.map((item) => {
             if (item.routes) {
                 return (<SideNavigationItem key={item.name} name={item.name} path={item.path}
-                                            icon={item.icon} isContracted={isContracted} index={index}>
+                                            icon={item.icon} isContracted={isContracted} setIsContracted={setIsContracted}>
                     {constructSideNavigation(item.routes)}
                 </SideNavigationItem>)
             } else {
                 return <SideNavigationItem key={item.name} name={item.name} path={item.path}
-                                           icon={item.icon} isContracted={isContracted} index={index}/>
+                                           icon={item.icon} isContracted={isContracted} setIsContracted={setIsContracted}/>
             }
         })
     }, [sideNavigationConfig, isContracted])
@@ -36,10 +35,11 @@ export const SideNavigation: FC = () => {
                 {constructSideNavigation(sideNavigationConfig)}
             </List>
             <Tooltip title={isContracted ? 'Раскрыть меню' : 'Свернуть меню'}>
-                <Switch checked={!isContracted} onChange={() => {
-                    sessionStorage.setItem('sideNavigationIsContractedState', !isContracted ? 'true' : 'false')
-                    setIsContracted(!isContracted)
-                }} color={'secondary'}/>
+                <Stack direction={'row'} spacing={theme.spacing(2)}>
+                    <Switch checked={!isContracted} onChange={() => {
+                        setIsContracted(!isContracted)
+                    }} color={'secondary'}/>
+                </Stack>
             </Tooltip>
         </Stack>
     )

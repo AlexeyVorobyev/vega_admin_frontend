@@ -1,24 +1,11 @@
-import {api} from './api'
-import {IUniversitiesPayload} from "./types/universities";
-
-
-const constructUniversitiesQueryString = (config: IUniversitiesPayload): string => {
-    let resString = '?'
-
-    for (const key of Object.keys(config)) {
-        resString += `${key}=${config[key as keyof IUniversitiesPayload]}&`
-    }
-
-    console.log('DEBUG QUERYPARAMS', resString)
-
-    return resString === '?' ? '' : resString
-}
+import {api, constructQueryString} from './api'
+import {IUniversitiesPayload, IUniversityPostPayload} from "./types/universities";
 
 export const universitiesApi = api.injectEndpoints({
     endpoints: (builder) => ({
         universities: builder.query<any, IUniversitiesPayload>({
             query: (settings) => ({
-                url: '/university' + constructUniversitiesQueryString(settings),
+                url: '/university' + constructQueryString(settings),
                 method: 'GET',
             }),
             providesTags: ['universities']
@@ -37,6 +24,14 @@ export const universitiesApi = api.injectEndpoints({
             }),
             invalidatesTags: ['universities']
         }),
+        universityPost: builder.mutation<any, IUniversityPostPayload>({
+            query: (settings) => ({
+                url: `/university`,
+                method: 'POST',
+                body:settings
+            }),
+            invalidatesTags: ['universities']
+        }),
     }),
     overrideExisting: false
 })
@@ -44,5 +39,7 @@ export const universitiesApi = api.injectEndpoints({
 export const {
     useLazyUniversitiesQuery,
     useUniversityDeleteMutation,
-    useUniversityQuery
+    useUniversityQuery,
+    useLazyUniversityQuery,
+    useUniversityPostMutation
 } = universitiesApi
