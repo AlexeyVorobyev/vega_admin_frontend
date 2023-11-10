@@ -22,15 +22,10 @@ export const AlexDataTableActions: FC<IProps> = ({
 
     const handleDelete = useCallback(() => {
         actionsConfig.delete?.mutation!({id: row.get(actionsConfig.delete?.columnName)})
-            .then((response) => {
-                console.log(response)
-                if (response.hasOwnProperty('error')) {
-                    throw new Error('ыыыы')
-                }
+            .then(() => {
                 setOpenDialog(false)
             })
-            .catch((error) => {
-                console.log(error)
+            .catch(() => {
                 setOpenDialog(false)
             })
     }, [actionsConfig])
@@ -61,7 +56,7 @@ export const AlexDataTableActions: FC<IProps> = ({
                             variant={'text'}
                             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                                 event.stopPropagation()
-                                navigate(`${actionsConfig?.view?.path!}?id=${row.get(actionsConfig!.view!.columnName)}`)
+                                navigate(`${actionsConfig?.view?.path!}?id=${row.get(actionsConfig!.view!.columnName)}${actionsConfig!.view!.params ? '&' + actionsConfig!.view!.params.toString() : ''}`)
                             }}>
                             <Typography variant={'button'} color={theme.palette.text.primary}>Просмотр</Typography>
                         </Button>)}
@@ -70,7 +65,7 @@ export const AlexDataTableActions: FC<IProps> = ({
                             variant={'text'}
                             onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                                 event.stopPropagation()
-                                navigate(`${actionsConfig?.edit?.path!}?id=${row.get(actionsConfig!.view!.columnName)}`)
+                                navigate(`${actionsConfig?.edit?.path!}?id=${row.get(actionsConfig!.view!.columnName)}${actionsConfig!.view!.params ? '&' + actionsConfig!.edit!.params.toString() : ''}`)
                             }}>
                             <Typography variant={'button'} color={theme.palette.text.primary}>Редактировать</Typography>
                         </Button>)}

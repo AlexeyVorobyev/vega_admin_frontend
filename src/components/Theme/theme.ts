@@ -11,11 +11,11 @@ declare module '@mui/material/styles' {
     }
 
     interface PaletteColorOptions {
-        main?:string
-        light?:string,
-        dark?:string
-        contrastText?:string
-        notContrastText?:string
+        main?: string
+        light?: string,
+        dark?: string
+        contrastText?: string
+        notContrastText?: string
     }
 }
 
@@ -41,11 +41,25 @@ export const theme = createTheme({
             contrastText: '#fff',
         },
         neutral: {
-            main:'#757575',
-            light:'#9e9e9e',
-            dark:'#616161',
-            contrastText:'#FFFFFF',
-            notContrastText:'#616161'
+            main: '#757575',
+            light: '#9e9e9e',
+            dark: '#616161',
+            contrastText: '#FFFFFF',
+            notContrastText: '#616161'
         }
     },
 })
+
+export const globalStyles = () => ({
+    "&::-webkit-scrollbar": {
+        width: 5,
+        height: 5
+    },
+    "&::-webkit-scrollbar-track": {
+        backgroundColor: null
+    },
+    "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "#b2b2b2",
+        borderRadius: 2
+    },
+});

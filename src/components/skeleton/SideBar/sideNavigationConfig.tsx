@@ -4,7 +4,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import QuizIcon from '@mui/icons-material/Quiz';
 import PersonIcon from '@mui/icons-material/Person';
-import {EPageType} from "../../pages/СustomizationWrapperPage/СustomizationPage";
+import {EPageType} from "../../pages/СustomizationPage/СustomizationPage";
 
 export interface ISideNavigationConfig {
     path: string | null,

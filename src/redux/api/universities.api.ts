@@ -1,5 +1,5 @@
 import {api, constructQueryString} from './api'
-import {IUniversitiesPayload, IUniversityPostPayload} from "./types/universities";
+import {IUniversitiesPayload, IUniversityPostPutPayload} from "./types/universities";
 
 export const universitiesApi = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -15,7 +15,6 @@ export const universitiesApi = api.injectEndpoints({
                 url: `/university/${settings.id}`,
                 method: 'GET',
             }),
-            providesTags: ['universities']
         }),
         universityDelete: builder.mutation<any, { id: string }>({
             query: (settings) => ({
@@ -24,11 +23,19 @@ export const universitiesApi = api.injectEndpoints({
             }),
             invalidatesTags: ['universities']
         }),
-        universityPost: builder.mutation<any, IUniversityPostPayload>({
+        universityPost: builder.mutation<any, { body: IUniversityPostPutPayload }>({
             query: (settings) => ({
                 url: `/university`,
                 method: 'POST',
-                body:settings
+                body: settings.body
+            }),
+            invalidatesTags: ['universities']
+        }),
+        universityPut: builder.mutation<any, { id: string, body: IUniversityPostPutPayload }>({
+            query: (settings) => ({
+                url: `/university/${settings.id}`,
+                method: 'PUT',
+                body: settings.body
             }),
             invalidatesTags: ['universities']
         }),
@@ -41,5 +48,6 @@ export const {
     useUniversityDeleteMutation,
     useUniversityQuery,
     useLazyUniversityQuery,
-    useUniversityPostMutation
+    useUniversityPostMutation,
+    useUniversityPutMutation
 } = universitiesApi

@@ -18,6 +18,9 @@ interface Props {
     maxRows?: number
 }
 
+const DEBUG = false
+const DEBUG_PREFIX = 'ALEX_INPUT'
+
 const AlexInput: React.FC<Props> = ({
                                         name,
                                         defaultValue,
@@ -40,7 +43,7 @@ const AlexInput: React.FC<Props> = ({
     return (
         <Controller
             name={name}
-            defaultValue={defaultValue}
+            defaultValue={defaultValue || ''}
             control={control}
             rules={{
                 validate: {
@@ -48,32 +51,36 @@ const AlexInput: React.FC<Props> = ({
                     ...validateFunctions,
                 }
             }}
-            render={({field: {onChange, value}}) => (
-                <FormControl fullWidth>
-                    <TextField
-                        type={showPassword ? "text" : "password"}
-                        label={error && errorText ? `${label}, ${errorText}` : label}
-                        value={value}
-                        onChange={(event: any) => onChange(event.target.value)}
-                        error={error}
-                        multiline={multiline}
-                        maxRows={maxRows}
-                        InputProps={{
-                            endAdornment: hidden ? (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                    >
-                                        {showPassword ? <Visibility/> : <VisibilityOff/>}
-                                    </IconButton>
-                                </InputAdornment>
-                            ) : null
-                        }}
-                    />
-                </FormControl>
-            )
+            render={({field: {onChange, value}}) => {
+                DEBUG && console.log(DEBUG_PREFIX,'value',value)
+                return (
+                    <FormControl fullWidth>
+                        <TextField
+                            defaultValue={value}
+                            type={showPassword ? "text" : "password"}
+                            label={error && errorText ? `${label}, ${errorText}` : label}
+                            value={value}
+                            onChange={onChange}
+                            error={error}
+                            multiline={multiline}
+                            maxRows={maxRows}
+                            InputProps={{
+                                endAdornment: hidden ? (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                        >
+                                            {showPassword ? <Visibility/> : <VisibilityOff/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ) : null,
+                            }}
+                        />
+                    </FormControl>
+                )
+            }
             }
         />
     )

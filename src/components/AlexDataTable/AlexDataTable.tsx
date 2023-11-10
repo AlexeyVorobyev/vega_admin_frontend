@@ -31,6 +31,7 @@ export type ICustomDataTableRow = Map<string, string>
 export interface IActionConfig {
     columnName: string // номер столбца для использования в роли id
     path: string // путь к странице
+    params: URLSearchParams
 }
 
 export interface IActionsConfig {
@@ -174,7 +175,7 @@ export const AlexDataTable: FC<IProps> = ({
                                               sx={{cursor: actionsConfig?.view ? 'pointer' : undefined}} role="checkbox"
                                               tabIndex={-1} key={index}
                                               onClick={actionsConfig?.view ? () => {
-                                                  navigate(`${actionsConfig?.view?.path!}?id=${row.get(actionsConfig!.view!.columnName)}`)
+                                                  navigate(`${actionsConfig?.view?.path!}?id=${row.get(actionsConfig!.view!.columnName)}${actionsConfig!.view!.params ? '&' + actionsConfig!.view!.params.toString() : ''}`)
                                               } : undefined}>
                                         {[
                                             ...columnsState.map((column) => {

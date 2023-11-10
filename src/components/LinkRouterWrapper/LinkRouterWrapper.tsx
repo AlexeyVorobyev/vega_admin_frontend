@@ -1,5 +1,5 @@
 import {CSSProperties, FC, ReactNode} from "react";
-import {Link, To, useNavigate} from "react-router-dom";
+import {Link, To, useNavigate, useSearchParams} from "react-router-dom";
 import {Box, SxProps, Theme, Tooltip} from "@mui/material";
 
 interface IProps {
@@ -8,7 +8,7 @@ interface IProps {
     useNavigateProp?: boolean
     children: ReactNode
     sx?: SxProps<Theme>
-    tooltip?: boolean
+    tooltipTitle?: string
 }
 
 export const LinkRouterWrapper: FC<IProps> = ({
@@ -17,35 +17,40 @@ export const LinkRouterWrapper: FC<IProps> = ({
                                                   children,
                                                   useNavigateProp = false,
                                                   sx,
-                                                  tooltip
+                                                  tooltipTitle
                                               }) => {
 
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     return (
         <>
             {to
-                ? useNavigateProp
-                    ? <Box onClick={() => {
-                        typeof to === 'number' ? navigate(to) : navigate(to)
-                    }} sx={sx}>
-                        {children}
-                    </Box>
-                    : tooltip
-                        ? <Tooltip title={'Перейти'}>
-                            <Link
-                                to={to as string}
-                                relative={relative ? relative : undefined}
-                                style={{textDecoration: 'none', ...sx as CSSProperties}}>
-                                {children}
-                            </Link>
-                        </Tooltip>
+                ? <Tooltip title={tooltipTitle ? tooltipTitle : ''}>
+                    {useNavigateProp
+                        ? <Box sx={sx}
+                               onClick={() => {
+                                   if (typeof to === 'number') {
+                                       if (searchParams.get('from')) {
+                                           navigate(JSON.parse(searchParams.get('from')!) as To)
+                                       }
+                                       else {
+                                           navigate(to as number)
+                                       }
+                                   }
+                                   else {
+                                       navigate(to as To)
+                                   }
+                               }}>
+                            {children}
+                        </Box>
                         : <Link
                             to={to as string}
                             relative={relative ? relative : undefined}
                             style={{textDecoration: 'none', ...sx as CSSProperties}}>
                             {children}
-                        </Link>
+                        </Link>}
+                </Tooltip>
                 : children}
         </>
     )

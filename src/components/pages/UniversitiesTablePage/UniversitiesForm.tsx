@@ -1,14 +1,19 @@
 import React, {FC, useLayoutEffect} from "react";
-import {Box, Grid} from "@mui/material";
+import {Box, CircularProgress, Grid} from "@mui/material";
 import {useFormContext} from "react-hook-form";
 import {theme} from "../../Theme/theme";
 import {AlexInput} from "../../formUtils/AlexInput/AlexInput";
 import {AlexServerAutoComplete} from "../../formUtils/AlexServerAutocomplete/AlexServerAutoComplete";
-import {useUniversityPostMutation} from "../../../redux/api/universities.api";
+import {
+    useLazyUniversityQuery,
+    useUniversityPostMutation,
+    useUniversityPutMutation
+} from "../../../redux/api/universities.api";
 import {AlexSelect} from "../../formUtils/AlexSelect/AlexSelect";
-import {EGrade, IUniversityPostPayload} from "../../../redux/api/types/universities";
-import {useNavigate} from "react-router-dom";
+import {EGrade, IUniversityPostPutPayload} from "../../../redux/api/types/universities";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {useLazyTownsAutoCompleteQuery} from "../../../redux/api/towns.api";
+import {extractIds} from "../../functions/extractIds";
 
 interface IProps {
     setOnSubmitFunc: React.Dispatch<React.SetStateAction<{ callback: ((data: any) => void) | null }>>
@@ -24,31 +29,59 @@ export const UniversitiesForm: FC<IProps> = ({
                                              }) => {
 
 
-    const {formState: {errors}} = useFormContext()
+    const {formState: {errors}, reset} = useFormContext()
+    const [searchParams] = useSearchParams()
     const [addUniversity] = useUniversityPostMutation()
+    const [updateUniversity] = useUniversityPutMutation()
+    const [lazyUniversityQuery, result] = useLazyUniversityQuery()
     const navigate = useNavigate()
 
-    const update = (data: any) => {
+    useLayoutEffect(() => {
+        if (edit) {
+            lazyUniversityQuery({id: searchParams.get('id')!})
+                .then((response) => {
+                    console.log(DEBUG_PREFIX, 'query response', response)
+                    const data = {
+                        ...response.data,
+                        town: {
+                            id: response.data.town.id,
+                            name: response.data.town.title
+                        }
+                    }
+                    console.log(DEBUG_PREFIX, 'query after processing', data)
+                    reset(data)
+                })
+        }
+    }, [])
 
-    }
-
-    const add = (data: IUniversityPostPayload) => {
-        addUniversity(data)
+    const update = (data: IUniversityPostPutPayload) => {
+        DEBUG && console.log(DEBUG_PREFIX, 'data UPDATE', data)
+        updateUniversity({id: searchParams.get('id')!, body: data})
             .then((response) => {
                 console.log(DEBUG_PREFIX, 'promise response', response)
-                navigate('./../table')
+                navigate(searchParams.get('from') || './../table')
+            })
+    }
+
+    const add = (data: IUniversityPostPutPayload) => {
+        DEBUG && console.log(DEBUG_PREFIX, 'data ADD', data)
+        addUniversity({body: data})
+            .then((response) => {
+                console.log(DEBUG_PREFIX, 'promise response', response)
+                navigate(searchParams.get('from') || './../table')
             })
     }
 
     const onSubmit = (data: any) => {
         DEBUG && console.log(DEBUG_PREFIX, 'data BEFORE processing', data)
-        data.priority = 0
-
-        DEBUG && console.log(DEBUG_PREFIX, 'data AFTER processing', data)
+        data = extractIds(data)
 
         if (edit) {
-
+            DEBUG && console.log(DEBUG_PREFIX, 'data AFTER processing', data)
+            update(data)
         } else {
+            data.priority = 0
+            DEBUG && console.log(DEBUG_PREFIX, 'data AFTER processing', data)
             add(data)
         }
     }
@@ -62,19 +95,17 @@ export const UniversitiesForm: FC<IProps> = ({
         display: 'flex',
         flex: 1,
         overflowY: 'scroll',
-        "&::-webkit-scrollbar": {
-            width: 5,
-            height: 5
-        },
-        "&::-webkit-scrollbar-track": {
-            backgroundColor: null
-        },
-        "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#b2b2b2",
-            borderRadius: 2
-        },
     }}>
-        {(<Box sx={{
+        {(edit && !result.data) && (<Box sx={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        }}>
+            <CircularProgress/>
+        </Box>)}
+        {(!edit || result.data) && (<Box sx={{
             width: '100%',
             padding: theme.spacing(2),
             boxSizing: 'border-box'

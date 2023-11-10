@@ -29,7 +29,7 @@ interface IProps {
     }
 }
 
-const DEBUG = true
+const DEBUG = false
 const DEBUG_PREFIX = 'ALEX_SERVER_AUTOCOMPLETE'
 
 export const AlexServerAutoComplete: React.FC<IProps> = ({

@@ -17,6 +17,9 @@ interface Props {
     errorText?: string
 }
 
+const DEBUG = false
+const DEBUG_PREFIX = 'ALEX_SELECT'
+
 export const AlexSelect: React.FC<Props> = ({
                                                 name,
                                                 defaultValue,
@@ -31,26 +34,30 @@ export const AlexSelect: React.FC<Props> = ({
     return (
         <Controller
             name={name}
-            defaultValue={defaultValue || ""}
+            defaultValue={defaultValue || ''}
             control={control}
             rules={{
                 validate: {
                     required: required ? (value: string) => value?.length > 0 || 'обязательное поле' : () => true,
                 }
             }}
-            render={({field: {onChange, value}}) => (
-                <FormControl fullWidth>
-                    <TextField
-                        value={value?.id || ''}
-                        label={error && errorText ? `${label}, ${errorText}` : label}
-                        error={error}
-                        onChange={onChange}
-                        select
-                    >
-                        {options.map((option) => <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>)}
-                    </TextField>
-                </FormControl>
-            )
+            render={({field: {onChange, value}}) => {
+                DEBUG && console.log(DEBUG_PREFIX, 'value', value)
+                return (
+                    <FormControl fullWidth>
+                        <TextField
+                            value={value}
+                            label={error && errorText ? `${label}, ${errorText}` : label}
+                            error={error}
+                            onChange={onChange}
+                            select
+                        >
+                            {options.map((option) => <MenuItem key={option.id}
+                                                               value={option.id}>{option.name}</MenuItem>)}
+                        </TextField>
+                    </FormControl>
+                )
+            }
             }
         />
     )

@@ -1,6 +1,7 @@
 import {ReactNode} from "react";
 import {TutorsTablePage} from "../pages/TutorsTablePage/TutorsTablePage";
-import {CustomizationPage, EPageType} from "../pages/СustomizationWrapperPage/СustomizationPage";
+import {CustomizationPage, EPageType} from "../pages/СustomizationPage/СustomizationPage";
+import {Navigate} from "react-router-dom";
 
 export interface IRoute {
     path: string,
@@ -15,6 +16,11 @@ export const routesList: IRoute[] = [
 
     {path: 'customization/tutors', name: 'Настройка репетиторов', component: <TutorsTablePage/>},
 
+    {
+        path: `customization/universities`,
+        name: 'Учебные заведения',
+        component: <Navigate to={`/customization/universities/${EPageType.table}`}/>
+    },
     {
         path: `customization/universities/${EPageType.table}`,
         name: 'Таблица учебных заведений',

@@ -16,7 +16,6 @@ export const UniversitiesCard: FC = () => {
         isLoading,
         isSuccess
     } = useUniversityQuery({id: searchParams.get('id')!}, {
-        refetchOnMountOrArgChange: true,
         skip: false,
     })
 

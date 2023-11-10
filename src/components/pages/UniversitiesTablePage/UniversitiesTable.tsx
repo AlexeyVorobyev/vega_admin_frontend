@@ -4,7 +4,8 @@ import {UniversitiesTableColumns} from "./columns";
 import {useLazyUniversitiesQuery, useUniversityDeleteMutation} from "../../../redux/api/universities.api";
 import {usePageState} from "../../functions/usePageState";
 import {varsBehaviourMapUniversities} from "./varsBehaviourMapUniversities";
-import {EPageType} from "../СustomizationWrapperPage/СustomizationPage";
+import {EPageType} from "../СustomizationPage/СustomizationPage";
+import {useLocation} from "react-router-dom";
 
 export const UniversitiesTable: FC = () => {
     const [lazyUniversitiesQuery, result] = useLazyUniversitiesQuery()
@@ -18,6 +19,7 @@ export const UniversitiesTable: FC = () => {
         variables && lazyUniversitiesQuery(variables)
     }, [variables])
 
+    const location = useLocation()
 
     return (
         <AlexDataTable columns={UniversitiesTableColumns}
@@ -27,19 +29,25 @@ export const UniversitiesTable: FC = () => {
                        availableElements={result?.currentData?.totalElements}
                        columnsSelect simpleFilter footer
                        actionsConfig={{
-                             view: {
-                                 columnName: 'id',
-                                 path: `./../${EPageType.view}`
-                             },
-                             edit: {
-                                 columnName: 'id',
-                                 path: `./../${EPageType.edit}`
-                             },
-                             delete: {
-                                 columnName: 'id',
-                                 mutation: deleteUniversity,
-                                 showModal: true
-                             }
-                         }}/>
+                           view: {
+                               columnName: 'id',
+                               path: `./../${EPageType.view}`,
+                               params: new URLSearchParams ([
+                                   ['from',JSON.stringify(location.pathname + location.search)]
+                               ])
+                           },
+                           edit: {
+                               columnName: 'id',
+                               path: `./../${EPageType.edit}`,
+                               params: new URLSearchParams ([
+                                   ['from',JSON.stringify(location.pathname + location.search)]
+                               ])
+                           },
+                           delete: {
+                               columnName: 'id',
+                               mutation: deleteUniversity,
+                               showModal: true
+                           }
+                       }}/>
     )
 }

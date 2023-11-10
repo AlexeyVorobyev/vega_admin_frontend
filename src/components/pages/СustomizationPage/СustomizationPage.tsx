@@ -34,7 +34,7 @@ export const CustomizationPage: FC = () => {
                 deleteQuery: (id: string) => {
                     deleteUniversity({id: id})
                         .then(() => {
-                            navigate('./.')
+                            navigate('./../table')
                         })
                 },
                 [EPageType.table]: {
@@ -157,7 +157,7 @@ export const CustomizationPage: FC = () => {
                            justifyContent={'space-between'}>
                         <Typography
                             variant={'h6'}>Настройка {(customizationWrapperPageNameMap.get(namespace)!)[pageState].title}</Typography>
-                        <LinkRouterWrapper to={`./../add`}>
+                        <LinkRouterWrapper to={`./../add?${(new URLSearchParams([['from',JSON.stringify(location.pathname + location.search)]])).toString()}`}>
                             <Button variant={'contained'}>
                                 <Typography
                                     variant={'button'}>Добавить {(customizationWrapperPageNameMap.get(namespace)!)[pageState].button}</Typography>
@@ -166,7 +166,7 @@ export const CustomizationPage: FC = () => {
                     </Stack>
                 </>)
         }
-    }, [pageState])
+    }, [pageState,location,namespace,searchParams])
 
     return (<>
         {pageState === EPageType.add || pageState === EPageType.edit

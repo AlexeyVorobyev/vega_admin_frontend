@@ -66,11 +66,11 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
         ),
         display: false
     },
-    {
-        id: 'priority',
-        label: 'Приоритет',
-        format: (value: IUniversityEntity) => value.priority.toString(),
-        display: false
-    },
+    // {
+    //     id: 'priority',
+    //     label: 'Приоритет',
+    //     format: (value: IUniversityEntity) => value.priority.toString(),
+    //     display: false
+    // },
 ]
 

@@ -35,7 +35,7 @@ export interface IUniversityEntity {
     studentsTelegramChatUrl: string;
 }
 
-export interface IUniversityPostPayload {
+export interface IUniversityPostPutPayload {
     title: string
     shortTitle: string
     description: string
