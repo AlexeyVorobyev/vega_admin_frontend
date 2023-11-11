@@ -6,6 +6,7 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
     {
         id: 'id',
         label: 'id',
+        display: false
     },
     {
         id: 'title',

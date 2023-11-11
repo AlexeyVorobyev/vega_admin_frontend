@@ -1,5 +1,5 @@
 import {api} from './api'
-export const templateApi = api.injectEndpoints({
+export const testsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         templateQuery: builder.query({
             query: (settings:{id:number}) => ({
@@ -26,7 +26,4 @@ export const templateApi = api.injectEndpoints({
 })
 
 export const {
-    useTemplateQueryQuery,
-    useLazyTemplateQueryQuery,
-    useTemplateMutationMutation
-} = templateApi
+} = testsApi

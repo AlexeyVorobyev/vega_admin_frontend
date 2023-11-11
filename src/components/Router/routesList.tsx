@@ -1,5 +1,4 @@
 import {ReactNode} from "react";
-import {TutorsTablePage} from "../pages/TutorsTablePage/TutorsTablePage";
 import {CustomizationPage, EPageType} from "../pages/СustomizationPage/СustomizationPage";
 import {Navigate} from "react-router-dom";
 
@@ -13,8 +12,6 @@ export interface IRoute {
 
 export const routesList: IRoute[] = [
     {path: '/', name: 'Статистика', component: null},
-
-    {path: 'customization/tutors', name: 'Настройка репетиторов', component: <TutorsTablePage/>},
 
     {
         path: `customization/universities`,
@@ -42,7 +39,47 @@ export const routesList: IRoute[] = [
         component: <CustomizationPage/>
     },
 
-    {path: 'customization/tests', name: 'Настройка тестов', component: null}
+    {
+        path: 'customization/tests',
+        name: 'Настройка тестов',
+        component: <Navigate to={`/customization/tests/${EPageType.table}`}/>
+    },
+    {
+        path: `customization/tests/${EPageType.table}`,
+        name: 'Таблица тестов',
+        component: <CustomizationPage/>
+    },
+    {
+        path: `customization/tests/${EPageType.view}`,
+        name: 'Тест',
+        component: <CustomizationPage/>
+    },
+    {
+        path: `customization/tests/${EPageType.edit}`,
+        name: 'Настройка теста',
+        component: <CustomizationPage/>
+    },
+    {
+        path: `customization/tests/${EPageType.add}`,
+        name: 'Добавление теста',
+        component: <CustomizationPage/>
+    },
+
+    {
+        path: 'customization/users',
+        name: 'Настройка пользователей',
+        component: <Navigate to={`/customization/users/${EPageType.table}`}/>
+    },
+    {
+        path: `customization/users/${EPageType.table}`,
+        name: 'Таблица пользователей',
+        component: <CustomizationPage/>
+    },
+    {
+        path: `customization/users/${EPageType.view}`,
+        name: 'Пользователь',
+        component: <CustomizationPage/>
+    },
 ]
 
 const mapRoutesListPaths = (routesList: IRoute[]): string[] => {

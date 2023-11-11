@@ -27,6 +27,7 @@ interface IProps {
     validateFunctions?: {
         [key: string]: (valueToCheck: string) => boolean | string
     }
+    debounceTime?:number
 }
 
 const DEBUG = false
@@ -44,14 +45,15 @@ export const AlexServerAutoComplete: React.FC<IProps> = ({
                                                              style,
                                                              error = false,
                                                              errorText = undefined,
-                                                             validateFunctions
+                                                             validateFunctions,
+                                                             debounceTime = 800
                                                          }) => {
 
     const {control} = useFormContext()
     const [inputValue, setInputValue] = React.useState('')
     const [options, setOptions] = useState<null | Array<IOption>>(null)
     const [lazyGetQuery, result] = useLazyGetQuery()
-    const debouncedLazyGetQuery = useCallback(debounce(lazyGetQuery, 350), [])
+    const debouncedLazyGetQuery = useCallback(debounce(lazyGetQuery, debounceTime), [])
 
     useEffect(() => {
         debouncedLazyGetQuery({page: 0, size: perPage, titleFilter: inputValue})

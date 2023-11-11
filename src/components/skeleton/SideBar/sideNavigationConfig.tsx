@@ -17,18 +17,10 @@ export interface ISideNavigationConfig {
 export const sideNavigationConfig: ISideNavigationConfig[] = [
     {path: '/', name: 'Статистика', icon: <QueryStatsIcon/>},
 
-    // {path:'/tutors', name:'Репетиторы', component:<p>xyz</p>},
-    //
-    // {path:'/universities', name:'ВУЗЫ', component:null},
-    //
-    // {path:'/colleges', name:'ССУЗЫ', component:null},
-    //
-    // {path:'/tests', name:'Тесты', component:null},
-
     {
         path: null, name: 'Настройки', icon: <SettingsIcon/>,
         routes: [
-            {path: 'customization/tutors', name: 'Репетиторы', icon: <PersonIcon/>},
+            {path: 'customization/users', name: 'Пользователи', icon: <PersonIcon/>},
 
             {path: `customization/universities/${EPageType.table}`, name: 'Учебные заведения', icon: <SchoolOutlinedIcon/>},
 
