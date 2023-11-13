@@ -1,7 +1,9 @@
-import React, {FC, useState} from "react";
-import {IconButton, Popover, Stack, Tooltip} from "@mui/material";
-import {theme} from "../Theme/theme";
+import React, {FC, useCallback, useState} from "react";
+import {Box, Button, Divider, IconButton, Popover, Stack, Tooltip, Typography} from "@mui/material";
 import TuneIcon from '@mui/icons-material/Tune';
+import {AlexFiltersFormContext} from "./AlexFiltersFormContext";
+import {alexFiltersMap} from "./alexFiltersMap";
+import {theme} from "../Theme/theme";
 
 interface IProps {
     filterListIds: string[]
@@ -30,9 +32,9 @@ export const AlexFilters: FC<IProps> = ({
                 horizontal: 'left',
             }}
         >
-            <Stack direction={'column'} padding={theme.spacing(2)}>
+            <AlexFiltersFormContext setAnchorEl={setAnchorEl}>
 
-            </Stack>
+            </AlexFiltersFormContext>
         </Popover>
     </>)
 }

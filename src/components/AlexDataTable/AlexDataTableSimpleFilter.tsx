@@ -1,31 +1,41 @@
-import {FC, useCallback, useEffect, useLayoutEffect, useState} from "react";
+import React, {FC, useCallback, useEffect, useLayoutEffect, useState} from "react";
 import {InputAdornment, TextField} from "@mui/material";
-import {useSearchParams} from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
 import {debounce} from "../functions/debounce";
 
-export const AlexDataTableSimpleFilter: FC = () => {
+interface IProps {
+    serverSideOptions: Map<string, any>
+    setServerSideOptions: React.Dispatch<React.SetStateAction<Map<string, any>>>
+}
+
+export const AlexDataTableSimpleFilter: FC<IProps> = ({
+                                                          serverSideOptions,
+                                                          setServerSideOptions
+                                                      }) => {
 
     const [simpleFilterState, setSimpleFilterState] = useState<string | null>(null)
     const [middleWareFilterState, setMiddleWareFilterState] = useState<string | null>(null)
-    const [searchParams, setSearchParams] = useSearchParams()
-    const debouncedSetMiddleWareFilterState = useCallback(debounce(setMiddleWareFilterState, 500), [])
+    const debouncedSetMiddleWareFilterState = useCallback(debounce(setMiddleWareFilterState, 800), [])
 
     useLayoutEffect(() => {
-        const simpleFilterSearchParam = searchParams.get('simpleFilter')
+        const simpleFilterSearchParam = serverSideOptions.get('simpleFilter')
         simpleFilterSearchParam && setMiddleWareFilterState(simpleFilterSearchParam)
         simpleFilterSearchParam && setSimpleFilterState(simpleFilterSearchParam)
-    }, [searchParams])
+    }, [])
 
     useLayoutEffect(() => {
         debouncedSetMiddleWareFilterState(simpleFilterState)
     }, [simpleFilterState])
 
     useEffect(() => {
-        setSearchParams(new URLSearchParams([
-            ...Array.from(searchParams.entries()).filter((item) => item[0] !== 'simpleFilter'),
-            middleWareFilterState ? ['simpleFilter', middleWareFilterState] : []
-        ].filter((item) => item.length)))
+        setServerSideOptions((prev) => {
+            if (middleWareFilterState) {
+                prev.set('simpleFilter', middleWareFilterState)
+            } else {
+                prev.delete('simpleFilter')
+            }
+            return new Map(prev)
+        })
     }, [middleWareFilterState])
 
     return (

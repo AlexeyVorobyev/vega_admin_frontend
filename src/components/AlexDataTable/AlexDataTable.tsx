@@ -1,4 +1,4 @@
-import {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -51,27 +51,33 @@ interface IProps {
     availablePages: number,
     availableElements?: number
     perPageOptions?: string[]
-    simpleFilter?: boolean,
+    simpleFilter?: boolean
     columnsSelect?: boolean
     footer?: boolean
+    filterListIds?: string[],
+    serverSideOptions: Map<string, any>
+    setServerSideOptions: React.Dispatch<React.SetStateAction<Map<string, any>>>
 }
 
 const DEBUG = true
 const DEBUG_PREFIX = 'ALEX_DATA_TABLE'
 
 export const AlexDataTable: FC<IProps> = ({
-                                                columns,
-                                                data,
-                                                actionsConfig,
-                                                availablePages,
-                                                perPageOptions = ['1', '2', '4', '8', '16', '32'],
-                                                simpleFilter = false,
-                                                columnsSelect = false,
-                                                availableElements,
-                                                footer= false
-                                            }) => {
+                                              columns,
+                                              data,
+                                              actionsConfig,
+                                              availablePages,
+                                              perPageOptions = ['1', '2', '4', '8', '16', '32'],
+                                              simpleFilter = false,
+                                              columnsSelect = false,
+                                              availableElements,
+                                              footer = false,
+                                              filterListIds,
+                                              setServerSideOptions,
+                                              serverSideOptions
+                                          }) => {
 
-    DEBUG && console.log(DEBUG_PREFIX,'DATA',data)
+    DEBUG && console.log(DEBUG_PREFIX, 'DATA', data)
 
     const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] | null => {
         if (!data) return null
@@ -109,7 +115,9 @@ export const AlexDataTable: FC<IProps> = ({
         <Stack sx={{height: '100%', width: '100%'}} direction={'column'} useFlexGap>
             {(simpleFilter || columnsSelect) &&
                 <AlexDataTableHeader simpleFilter={simpleFilter} columnsSelect={columnsSelect}
-                                     columnsState={columnsState} setColumnsState={setColumnsState}/>}
+                                     columnsState={columnsState} setColumnsState={setColumnsState}
+                                     filterListIds={filterListIds} setServerSideOptions={setServerSideOptions}
+                                     serverSideOptions={serverSideOptions}/>}
             {!rows && (<Box sx={{
                 width: '100%',
                 height: '100%',
@@ -143,7 +151,9 @@ export const AlexDataTable: FC<IProps> = ({
                                                        style={{minWidth: column.minWidth}}>
                                                 {column.sort === false ?
                                                     column.label
-                                                    : (<AlexDataTableSortWrapper column={column}>
+                                                    : (<AlexDataTableSortWrapper column={column}
+                                                                                 setServerSideOptions={setServerSideOptions}
+                                                                                 serverSideOptions={serverSideOptions}>
                                                         {column.label}
                                                     </AlexDataTableSortWrapper>)}
                                             </TableCell>
@@ -193,7 +203,8 @@ export const AlexDataTable: FC<IProps> = ({
             {footer && (<Box marginTop={'auto'} width={'100%'}>
                 <Divider/>
                 <AlexDataTableFooter availablePages={availablePages} perPageOptions={perPageOptions}
-                                     availableElements={availableElements}/>
+                                     availableElements={availableElements} setServerSideOptions={setServerSideOptions}
+                                     serverSideOptions={serverSideOptions}/>
             </Box>)}
         </Stack>
     )

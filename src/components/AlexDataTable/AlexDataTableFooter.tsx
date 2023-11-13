@@ -1,30 +1,30 @@
-import {FC, useLayoutEffect, useRef, useState} from "react";
+import React, {FC, useLayoutEffect, useRef, useState} from "react";
 import {FormControl, MenuItem, Pagination, Stack, TextField, Typography} from "@mui/material";
 import {theme} from "../Theme/theme";
-import {useSearchParams} from "react-router-dom";
 import {booleanNumber} from "../functions/booleanNumber";
 
 interface IProps {
-    availablePages: number,
-    perPageOptions: string[],
+    availablePages: number
+    perPageOptions: string[]
     availableElements?: number
+    serverSideOptions: Map<string, any>
+    setServerSideOptions: React.Dispatch<React.SetStateAction<Map<string, any>>>
 }
 
 export const AlexDataTableFooter: FC<IProps> = ({
-                                                      availablePages,
-                                                      perPageOptions,
-                                                      availableElements
-                                                  }) => {
-    const [searchParams, setSearchParams] = useSearchParams()
-    const [page, setPage] = useState<string | null>(searchParams.get('page') || null);
-    const [perPage, setPerPage] = useState<string | null>(searchParams.get('perPage') || null)
+                                                    availablePages,
+                                                    perPageOptions,
+                                                    availableElements,
+                                                    serverSideOptions,
+                                                    setServerSideOptions
+                                                }) => {
+    const [page, setPage] = useState<string | null>(serverSideOptions.get('page') || '1');
+    const [perPage, setPerPage] = useState<string | null>(serverSideOptions.get('perPage') || '8')
     const savedAvailablePages = useRef<string | null>(booleanNumber(availablePages) ? availablePages.toString() : null)
     const savedAvailableElements = useRef<string | null>(booleanNumber(availableElements) ? availableElements!.toString() : null)
 
     useLayoutEffect(() => {
-        if (!booleanNumber(availablePages)) {
-            return
-        }
+        if (!booleanNumber(availablePages)) return
         if (availablePages !== Number(savedAvailablePages.current) && savedAvailablePages.current) {
             setPage('0')
         }
@@ -38,35 +38,20 @@ export const AlexDataTableFooter: FC<IProps> = ({
     }, [availableElements])
 
     useLayoutEffect(() => {
-        if (!page) {
-            setPage(searchParams.get('page'))
-        }
-        if (!perPage) {
-            setPerPage(searchParams.get('perPage'))
-        }
-    }, [searchParams])
-
-    useLayoutEffect(() => {
-        page && searchParams.get('page') && setSearchParams(new URLSearchParams([
-            ['page', page],
-            ...Array.from(searchParams.entries()).filter((item) => item[0] !== 'page'),
-        ]))
+        if (!page) return
+        setServerSideOptions((prev) => {
+            prev.set('page', page)
+            return new Map(prev)
+        })
     }, [page])
 
     useLayoutEffect(() => {
-        perPage && searchParams.get('perPage') && setSearchParams(new URLSearchParams([
-            ['perPage', perPage],
-            ...Array.from(searchParams.entries()).filter((item) => item[0] !== 'perPage'),
-        ]))
+        if (!perPage) return
+        setServerSideOptions((prev) => {
+            prev.set('perPage', perPage)
+            return new Map(prev)
+        })
     }, [perPage])
-
-    useLayoutEffect(() => {
-        setSearchParams(new URLSearchParams([
-            ...Array.from(searchParams.entries()),
-            !searchParams.get('perPage') ? ['perPage', perPageOptions[perPageOptions.length / 2]] : [],
-            !searchParams.get('page') ? ['page', '0'] : [],
-        ].filter((item) => item.length)))
-    }, [searchParams])
 
     return (
         <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}
@@ -96,7 +81,6 @@ export const AlexDataTableFooter: FC<IProps> = ({
                 count={(booleanNumber(availablePages) ? availablePages : Number(savedAvailablePages.current) || 10) || 1}
                 page={Number(page) + 1}
                 color={'secondary'}
-                // @ts-ignore
                 onChange={(event: any, value) => setPage((value - 1).toString())}/>
         </Stack>
     )

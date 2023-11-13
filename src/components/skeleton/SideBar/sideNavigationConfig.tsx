@@ -2,7 +2,6 @@ import {ReactNode} from "react";
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import QuizIcon from '@mui/icons-material/Quiz';
 import PersonIcon from '@mui/icons-material/Person';
 import {EPageType} from "../../pages/СustomizationPage/СustomizationPage";
 
@@ -20,11 +19,18 @@ export const sideNavigationConfig: ISideNavigationConfig[] = [
     {
         path: null, name: 'Настройки', icon: <SettingsIcon/>,
         routes: [
-            {path: 'customization/users', name: 'Пользователи', icon: <PersonIcon/>},
+            {
+                path: 'customization/users',
+                name: 'Пользователи',
+                icon: <PersonIcon/>
+            },
+            {
+                path: `customization/universities/${EPageType.table}`,
+                name: 'Учебные заведения',
+                icon: <SchoolOutlinedIcon/>
+            },
 
-            {path: `customization/universities/${EPageType.table}`, name: 'Учебные заведения', icon: <SchoolOutlinedIcon/>},
-
-            {path: 'customization/tests', name: 'Тесты', icon: <QuizIcon/>}
+            // {path: 'customization/tests', name: 'Тесты', icon: <QuizIcon/>}
         ]
     },
 ]

@@ -11,8 +11,12 @@ export const UniversitiesTable: FC = () => {
     const [lazyUniversitiesQuery, result] = useLazyUniversitiesQuery()
     const [deleteUniversity] = useUniversityDeleteMutation()
 
-    const {variables} = usePageState({
-        varsBehaviorMap: varsBehaviourMapUniversities
+    const {
+        variables,
+        serverSideOptions,
+        setServerSideOptions
+    } = usePageState({
+        varsBehaviorMap: varsBehaviourMapUniversities,
     })
 
     useEffect(() => {
@@ -28,19 +32,22 @@ export const UniversitiesTable: FC = () => {
                        perPageOptions={['1', '2', '4', '8', '16', '32']}
                        availableElements={result?.currentData?.totalElements}
                        columnsSelect simpleFilter footer
+                       filterListIds={[]}
+                       serverSideOptions={serverSideOptions}
+                       setServerSideOptions={setServerSideOptions}
                        actionsConfig={{
                            view: {
                                columnName: 'id',
                                path: `./../${EPageType.view}`,
-                               params: new URLSearchParams ([
-                                   ['from',JSON.stringify(location.pathname + location.search)]
+                               params: new URLSearchParams([
+                                   ['from', JSON.stringify(location.pathname + location.search)]
                                ])
                            },
                            edit: {
                                columnName: 'id',
                                path: `./../${EPageType.edit}`,
-                               params: new URLSearchParams ([
-                                   ['from',JSON.stringify(location.pathname + location.search)]
+                               params: new URLSearchParams([
+                                   ['from', JSON.stringify(location.pathname + location.search)]
                                ])
                            },
                            delete: {
