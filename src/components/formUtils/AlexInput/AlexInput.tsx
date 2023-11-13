@@ -3,7 +3,7 @@ import {FormControl, IconButton, TextField, InputAdornment} from "@mui/material"
 import {Controller, useFormContext} from "react-hook-form";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 
-interface Props {
+interface IProps {
     name: string
     defaultValue?: string
     label?: string
@@ -21,7 +21,7 @@ interface Props {
 const DEBUG = false
 const DEBUG_PREFIX = 'ALEX_INPUT'
 
-const AlexInput: React.FC<Props> = ({
+const AlexInput: React.FC<IProps> = ({
                                         name,
                                         defaultValue,
                                         label,

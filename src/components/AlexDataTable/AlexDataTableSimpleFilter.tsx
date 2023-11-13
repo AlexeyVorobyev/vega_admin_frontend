@@ -40,7 +40,6 @@ export const AlexDataTableSimpleFilter: FC<IProps> = ({
 
     return (
         <TextField
-            sx={{marginRight: 'auto'}}
             value={simpleFilterState || ''}
             onChange={(event) => {
                 const value = event.currentTarget.value

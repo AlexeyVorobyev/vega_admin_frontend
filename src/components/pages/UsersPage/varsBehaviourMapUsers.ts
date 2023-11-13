@@ -6,8 +6,7 @@ export const varsBehaviourMapUsers = (initialVars: any) => {
     let resSort: string = ""
 
     if (initialVars.sort) {
-        const sortObj = JSON.parse(initialVars.sort)
-        console.log(sortObj, Object.keys(sortObj))
+        const sortObj = Object.fromEntries(initialVars.sort)
         for (const key of Object.keys(sortObj)) {
             if (sortObj![key] === 'asc') {
                 resSort += (`&sort=${key},${ESort.ascending}`)

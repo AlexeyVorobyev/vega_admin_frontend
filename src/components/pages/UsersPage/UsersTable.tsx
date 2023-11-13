@@ -10,7 +10,11 @@ import {varsBehaviourMapUsers} from "./varsBehaviourMapUsers";
 export const UsersTable: FC = () => {
     const [lazyUsersQuery, result] = useLazyUsersQuery()
 
-    const {variables} = usePageState({
+    const {
+        variables,
+        serverSideOptions,
+        setServerSideOptions
+    } = usePageState({
         varsBehaviorMap: varsBehaviourMapUsers
     })
 
@@ -27,6 +31,8 @@ export const UsersTable: FC = () => {
                        perPageOptions={['1', '2', '4', '8', '16', '32']}
                        availableElements={result?.currentData?.totalElements}
                        columnsSelect footer
+                       serverSideOptions={serverSideOptions}
+                       setServerSideOptions={setServerSideOptions}
                        actionsConfig={{
                            view: {
                                columnName: 'id',

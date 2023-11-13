@@ -1,18 +1,25 @@
-import React, {FC, useCallback, useState} from "react";
-import {Box, Button, Divider, IconButton, Popover, Stack, Tooltip, Typography} from "@mui/material";
+import React, {FC, useState} from "react";
+import {IconButton, Popover, Tooltip} from "@mui/material";
 import TuneIcon from '@mui/icons-material/Tune';
 import {AlexFiltersFormContext} from "./AlexFiltersFormContext";
+import {AlexFilter} from "./AlexFilter";
 import {alexFiltersMap} from "./alexFiltersMap";
-import {theme} from "../Theme/theme";
 
 interface IProps {
     filterListIds: string[]
+    serverSideOptions: Map<string, any>
+    setServerSideOptions: React.Dispatch<React.SetStateAction<Map<string, any>>>
 }
 
-export const AlexFilters: FC<IProps> = ({
-                                            filterListIds
-                                        }) => {
+const DEBUG = true
+const DEBUG_PREFIX = 'ALEX_FILTERS'
 
+export const AlexFilters: FC<IProps> = ({
+                                            filterListIds,
+                                            serverSideOptions,
+                                            setServerSideOptions
+                                        }) => {
+    DEBUG && console.log(DEBUG_PREFIX, 'filterListIds', filterListIds)
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
     return (<>
@@ -32,8 +39,16 @@ export const AlexFilters: FC<IProps> = ({
                 horizontal: 'left',
             }}
         >
-            <AlexFiltersFormContext setAnchorEl={setAnchorEl}>
-
+            <AlexFiltersFormContext setAnchorEl={setAnchorEl} setServerSideOptions={setServerSideOptions}
+                                    serverSideOptions={serverSideOptions} filterListIds={filterListIds}>
+                {filterListIds.map((id) => {
+                    const config = alexFiltersMap.get(id)
+                    if (config) {
+                        return <AlexFilter config={config}/>
+                    } else {
+                        return `Некорректный id фильтра ${id}`
+                    }
+                })}
             </AlexFiltersFormContext>
         </Popover>
     </>)

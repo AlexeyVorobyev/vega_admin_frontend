@@ -1,5 +1,5 @@
-import React, {FC} from "react";
-import {Divider, Stack} from "@mui/material";
+import React, {FC, useMemo} from "react";
+import {Chip, Divider, Stack, Typography} from "@mui/material";
 import {theme} from "../Theme/theme";
 import {ICustomDataTableColumn} from "./AlexDataTable";
 import {AlexDataTableSimpleFilter} from "./AlexDataTableSimpleFilter";
@@ -25,15 +25,27 @@ export const AlexDataTableHeader: FC<IProps> = ({
                                                     serverSideOptions,
                                                     setServerSideOptions
                                                 }) => {
+    const amountOfChosenFilters = useMemo(() => {
+        if (!filterListIds) return 0
+        return Array.from(serverSideOptions)
+            .filter((param) => [...filterListIds, 'simpleFilter'].includes(param[0])).length
+    }, [serverSideOptions, filterListIds])
 
     return (<>
         <Stack direction={'row'} justifyContent={'end'} spacing={theme.spacing(2)}
-               padding={theme.spacing(2)} useFlexGap>
-            {simpleFilter &&
-                <AlexDataTableSimpleFilter setServerSideOptions={setServerSideOptions}
-                                           serverSideOptions={serverSideOptions}/>}
+               padding={theme.spacing(2)} useFlexGap alignItems={'center'}>
+            <Stack direction={'row'} spacing={theme.spacing(2)} alignItems={'center'} sx={{marginRight: 'auto'}}>
+                {simpleFilter &&
+                    <AlexDataTableSimpleFilter setServerSideOptions={setServerSideOptions}
+                                               serverSideOptions={serverSideOptions}/>}
+                {amountOfChosenFilters
+                    ? <Chip label={<Typography variant={'body1'}>
+                        Применённые фильтры: {amountOfChosenFilters}</Typography>}/>
+                    : undefined}
+            </Stack>
             {filterListIds &&
-                <AlexFilters filterListIds={filterListIds}/>}
+                <AlexFilters filterListIds={filterListIds} setServerSideOptions={setServerSideOptions}
+                             serverSideOptions={serverSideOptions}/>}
             {columnsSelect &&
                 <AlexDataTableColumnsSelect columnsState={columnsState} setColumnsState={setColumnsState}/>}
         </Stack>

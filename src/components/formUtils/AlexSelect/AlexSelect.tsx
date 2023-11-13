@@ -2,16 +2,16 @@ import React from "react";
 import {FormControl, MenuItem, TextField} from "@mui/material";
 import {Controller, useFormContext} from "react-hook-form";
 
-interface Value {
+interface IValue {
     id: string,
     name: string | number
 }
 
-interface Props {
+interface IProps {
     name: string
-    defaultValue?: Value
+    defaultValue?: IValue
     label?: string
-    options: Array<Value>
+    options: Array<IValue>
     required?: boolean
     error?: boolean,
     errorText?: string
@@ -20,12 +20,12 @@ interface Props {
 const DEBUG = false
 const DEBUG_PREFIX = 'ALEX_SELECT'
 
-export const AlexSelect: React.FC<Props> = ({
+export const AlexSelect: React.FC<IProps> = ({
                                                 name,
                                                 defaultValue,
                                                 label,
                                                 options,
-                                                required = true,
+                                                required = false,
                                                 error,
                                                 errorText
                                             }) => {

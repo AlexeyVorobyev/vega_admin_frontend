@@ -32,7 +32,9 @@ export const UniversitiesTable: FC = () => {
                        perPageOptions={['1', '2', '4', '8', '16', '32']}
                        availableElements={result?.currentData?.totalElements}
                        columnsSelect simpleFilter footer
-                       filterListIds={[]}
+                       filterListIds={[
+                           'universityGrade',
+                       ]}
                        serverSideOptions={serverSideOptions}
                        setServerSideOptions={setServerSideOptions}
                        actionsConfig={{

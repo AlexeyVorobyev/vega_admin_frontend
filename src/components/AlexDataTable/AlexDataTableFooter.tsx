@@ -18,7 +18,7 @@ export const AlexDataTableFooter: FC<IProps> = ({
                                                     serverSideOptions,
                                                     setServerSideOptions
                                                 }) => {
-    const [page, setPage] = useState<string | null>(serverSideOptions.get('page') || '1');
+    const [page, setPage] = useState<string | null>(serverSideOptions.get('page') || '0');
     const [perPage, setPerPage] = useState<string | null>(serverSideOptions.get('perPage') || '8')
     const savedAvailablePages = useRef<string | null>(booleanNumber(availablePages) ? availablePages.toString() : null)
     const savedAvailableElements = useRef<string | null>(booleanNumber(availableElements) ? availableElements!.toString() : null)
