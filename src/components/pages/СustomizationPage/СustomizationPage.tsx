@@ -12,6 +12,10 @@ import {UniversitiesCard} from "../UniversitiesPage/UniversitiesCard";
 import {UniversitiesForm} from "../UniversitiesPage/UniversitiesForm";
 import {UsersTable} from "../UsersPage/UsersTable";
 import {UsersCard} from "../UsersPage/UsersCard";
+import {useSpecialityDeleteMutation} from "../../../redux/api/specialities.api";
+import {SpecialitiesTable} from "../SpecialitiesPage/SpecialitiesTable";
+import {SpecialitiesCard} from "../SpecialitiesPage/SpecialitiesCard";
+import {SpecialitiesForm} from "../SpecialitiesPage/SpecialitiesForm";
 
 export enum EPageType {
     edit = 'edit',
@@ -30,7 +34,39 @@ export const CustomizationPage: FC = () => {
 
     const navigate = useNavigate()
     const [deleteUniversity] = useUniversityDeleteMutation()
+    const [deleteSpeciality] = useSpecialityDeleteMutation()
     const customizationWrapperPageNameMap = useMemo(() => new Map([
+        ['specialities',
+            {
+                deleteQuery: (id: string) => {
+                    deleteSpeciality({id: id})
+                        .then(() => {
+                            if (searchParams.get('from')) {
+                                navigate(JSON.parse(searchParams.get('from')!))
+                            } else {
+                                navigate('./../table')
+                            }
+                        })
+                },
+                [EPageType.table]: {
+                    component: <SpecialitiesTable/>,
+                    title: 'специальностей',
+                    button: 'новую специальность'
+                },
+                [EPageType.view]: {
+                    component: <SpecialitiesCard/>,
+                    button: 'специальность'
+                },
+                [EPageType.add]: {
+                    component: SpecialitiesForm,
+                    title: 'специальности'
+                },
+                [EPageType.edit]: {
+                    component: SpecialitiesForm,
+                    title: 'специальности'
+                },
+            }
+        ],
         ['universities',
             {
                 deleteQuery: (id: string) => {
@@ -52,14 +88,14 @@ export const CustomizationPage: FC = () => {
                     component: <UniversitiesCard/>,
                     button: 'учебное заведение'
                 },
-                [EPageType.add]: {
-                    component: UniversitiesForm,
-                    title: 'учебного заведения'
-                },
-                [EPageType.edit]: {
-                    component: UniversitiesForm,
-                    title: 'учебного заведения'
-                },
+                // [EPageType.add]: {
+                //     component: UniversitiesForm,
+                //     title: 'учебного заведения'
+                // },
+                // [EPageType.edit]: {
+                //     component: UniversitiesForm,
+                //     title: 'учебного заведения'
+                // },
             }
         ],
         ['users',
@@ -151,12 +187,13 @@ export const CustomizationPage: FC = () => {
                                     }
                                 }
                             }}/>)}
-                        {customizationWrapperPageNameMap.get(namespace)![EPageType.edit] && (<LinkRouterWrapper to={`./../edit?id=${searchParams.get('id')}`}>
-                            <Button variant={'contained'}>
-                                <Typography
-                                    variant={'button'}>Редактировать {(customizationWrapperPageNameMap.get(namespace)!)[pageState].button}</Typography>
-                            </Button>
-                        </LinkRouterWrapper>)}
+                        {customizationWrapperPageNameMap.get(namespace)![EPageType.edit] && (
+                            <LinkRouterWrapper to={`./../edit?id=${searchParams.get('id')}`}>
+                                <Button variant={'contained'}>
+                                    <Typography
+                                        variant={'button'}>Редактировать {(customizationWrapperPageNameMap.get(namespace)!)[pageState].button}</Typography>
+                                </Button>
+                            </LinkRouterWrapper>)}
                     </Stack>
                 </>)
             case EPageType.add:

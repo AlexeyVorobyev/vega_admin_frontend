@@ -3,36 +3,47 @@ export enum EGrade {
     Middle = 'MIDDLE'
 }
 
+export const parseEGradeToRusName = (str: `${EGrade}`): string => {
+    switch (str) {
+        case EGrade.High:
+            return 'ВУЗ'
+        case EGrade.Middle:
+            return 'ССУЗ'
+        default:
+            return 'Другой'
+    }
+}
+
 export enum ESort {
     ascending = 'ASC',
     descending = 'DESC'
 }
 
 export interface IUniversitiesPayload {
-    titleFilter?: string,
-    gradeFilter?: EGrade.High | EGrade.Middle,
-    page?: number,
-    size?: number,
+    titleFilter?: string
+    gradeFilter?: `${EGrade}`
+    page?: number
+    size?: number
     sort?: {
-        [key: string]: ESort.ascending | ESort.descending
+        [key: string]: `${ESort}`
     }
 }
 
 export interface IUniversityEntity {
-    id: string;
-    title: string;
-    shortTitle: string;
-    description: string;
-    address: string;
-    site: string;
+    id: string
+    title: string
+    shortTitle: string
+    description: string
+    address: string
+    site: string
     town: {
-        id: string;
-        title: string;
-    };
-    grade: string;
-    cardPhoto: string;
-    priority: number;
-    studentsTelegramChatUrl: string;
+        id: string
+        title: string
+    }
+    grade: `${EGrade}`
+    cardPhoto: string
+    priority: number
+    studentsTelegramChatUrl: string
 }
 
 export interface IUniversityPostPutPayload {
@@ -42,7 +53,7 @@ export interface IUniversityPostPutPayload {
     address: string
     site: string
     town: string
-    grade: EGrade.High | EGrade.Middle
+    grade: `${EGrade}`
     cardPhoto?: string
     priority: number
     studentsTelegramChatUrl?: string

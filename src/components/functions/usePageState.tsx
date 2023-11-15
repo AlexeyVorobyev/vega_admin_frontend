@@ -1,15 +1,20 @@
 import {useSearchParams} from "react-router-dom";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 
 export enum EUsePageStateMode {
     queryString = 'QUERY_STRING',
-    sessionStorage = 'SESSION_STORAGE'
+    sessionStorage = 'SESSION_STORAGE',
+    localStorage = 'LOCAL_STORAGE',
+    noStorage = 'NO_STORAGE'
 }
+
+type TServerSideOptions = Map<string, any>
 
 interface IProps {
     varsBehaviorMap?: (params: any) => any
-    mode?: EUsePageStateMode.queryString | EUsePageStateMode.sessionStorage,
-    sessionStorageKey?: string
+    mode?: EUsePageStateMode.queryString | EUsePageStateMode.sessionStorage | EUsePageStateMode.localStorage | EUsePageStateMode.noStorage,
+    storageKey?: string
+    defaultValue?: TServerSideOptions
 }
 
 const DEBUG = true
@@ -37,40 +42,51 @@ const reviver = (key: string, value: any) => {
 export const usePageState = ({
                                  varsBehaviorMap,
                                  mode = EUsePageStateMode.queryString,
-                                 sessionStorageKey = 'pageState'
+                                 storageKey = 'pageState',
+                                 defaultValue = new Map([]) as Map<string, any>
                              }: IProps) => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [processedParams, setProcessedParams] = useState<any | null>(null)
+    const [processedParams, setProcessedParams] = useState<any>(null)
 
-    // синхронизация состояний queryString | sessionStorage -> serverSideOptions при моунте
     const initialSetServerSideOptions = useCallback(() => {
         switch (mode) {
             case EUsePageStateMode.queryString:
-                return new Map(
-                    Array.from(searchParams.entries()).map((param) => [param[0], JSON.parse(param[1], reviver)])
+                const queryStringState = new Map(
+                    Array.from(searchParams.entries())
+                        .map((param) => [param[0], JSON.parse(param[1], reviver)])
                 )
+                return new Map([...defaultValue, ...queryStringState]) as TServerSideOptions
             case EUsePageStateMode.sessionStorage:
-                const stringValue = sessionStorage.getItem(sessionStorageKey)
-                if (stringValue) {
-                    return JSON.parse(stringValue, reviver)
-                } else {
-                    return new Map([])
-                }
+            case EUsePageStateMode.localStorage:
+                const stringValue = EUsePageStateMode.sessionStorage
+                    ? sessionStorage.getItem(storageKey)
+                    : localStorage.getItem(storageKey)
+                return stringValue
+                    ? new Map([...defaultValue, ...JSON.parse(stringValue, reviver)]) as TServerSideOptions
+                    : defaultValue
+            case EUsePageStateMode.noStorage:
+                return defaultValue
         }
     }, [])
-    const [serverSideOptions, setServerSideOptions] = useState<Map<string, any>>(initialSetServerSideOptions()!)
 
-    // синхронизация состояний serverSideOptions -> queryString | sessionStorage
-    useEffect(() => {
+    // синхронизация состояний storage -> serverSideOptions при моунте
+    const [serverSideOptions, setServerSideOptions] = useState<TServerSideOptions>(initialSetServerSideOptions()!)
+
+    // синхронизация состояний serverSideOptions -> storage
+    useLayoutEffect(() => {
         DEBUG && console.log(DEBUG_PREFIX, 'current serverSideOptions state', serverSideOptions)
         switch (mode) {
             case EUsePageStateMode.queryString:
-                setSearchParams(new URLSearchParams([
-                    ...Array.from(serverSideOptions).map((param) => [param[0], JSON.stringify(param[1], replacer)]),
-                ]))
+                setSearchParams(new URLSearchParams(
+                    Array.from(serverSideOptions)
+                        .map((param) => [param[0], JSON.stringify(param[1], replacer)]),
+                ))
                 return
             case EUsePageStateMode.sessionStorage:
-                sessionStorage.setItem(sessionStorageKey, JSON.stringify(serverSideOptions, replacer))
+                sessionStorage.setItem(storageKey, JSON.stringify(serverSideOptions, replacer))
+                return
+            case EUsePageStateMode.localStorage:
+                localStorage.setItem(storageKey, JSON.stringify(serverSideOptions, replacer))
                 return
         }
     }, [serverSideOptions])

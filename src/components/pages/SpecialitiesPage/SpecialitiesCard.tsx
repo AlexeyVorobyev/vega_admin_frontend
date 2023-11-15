@@ -3,10 +3,10 @@ import {useSearchParams} from "react-router-dom";
 import {Box, CircularProgress, Grid} from "@mui/material";
 import {theme} from "../../Theme/theme";
 import {AlexDataView} from "../../formUtils/AlexDataView/AlexDataView";
-import {useUserQuery} from "../../../redux/api/users.api";
-import {IUserEntity, parseEUserRoleToRusName} from "../../../redux/api/types/users";
+import {useSpecialityQuery} from "../../../redux/api/specialities.api";
+import {ISpecialityEntity, parseEEducationLevelToRusName} from "../../../redux/api/types/specialities";
 
-export const UsersCard: FC = () => {
+export const SpecialitiesCard: FC = () => {
     const [searchParams] = useSearchParams()
 
     const {
@@ -14,11 +14,11 @@ export const UsersCard: FC = () => {
         isFetching,
         isLoading,
         isSuccess
-    } = useUserQuery({id: searchParams.get('id')!}, {
+    } = useSpecialityQuery({id: searchParams.get('id')!}, {
         skip: false,
     })
 
-    const userData: IUserEntity = useMemo(() => data as IUserEntity, [data])
+    const specialityData: ISpecialityEntity = useMemo(() => data as ISpecialityEntity, [data])
 
     return (
         <Box sx={{
@@ -44,32 +44,27 @@ export const UsersCard: FC = () => {
                 <Grid container spacing={theme.spacing(2)}>
                     <Grid item xs={6}>
                         <AlexDataView label={'ID'}>
-                            {userData.id}
+                            {specialityData.id}
                         </AlexDataView>
                     </Grid>
                     <Grid item xs={6}>
-                        <AlexDataView label={'Роль'}>
-                            {parseEUserRoleToRusName(userData.userRole)}
+                        <AlexDataView label={'Код'}>
+                            {specialityData.code}
                         </AlexDataView>
                     </Grid>
                     <Grid item xs={6}>
-                        <AlexDataView label={'Телеграм ID'}>
-                            {userData.telegramId}
+                        <AlexDataView label={'Название'}>
+                            {specialityData.title}
                         </AlexDataView>
                     </Grid>
                     <Grid item xs={6}>
-                        <AlexDataView label={'Имя пользователя'}>
-                            {userData.username}
+                        <AlexDataView label={'Уровень образования'}>
+                            {parseEEducationLevelToRusName(specialityData.educationLevel)}
                         </AlexDataView>
                     </Grid>
-                    <Grid item xs={6}>
-                        <AlexDataView label={'Имя'}>
-                            {userData.forename}
-                        </AlexDataView>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <AlexDataView label={'Фамилия'}>
-                            {userData.surname}
+                    <Grid item xs={12}>
+                        <AlexDataView label={'Описание'}>
+                            {specialityData.description}
                         </AlexDataView>
                     </Grid>
                 </Grid>

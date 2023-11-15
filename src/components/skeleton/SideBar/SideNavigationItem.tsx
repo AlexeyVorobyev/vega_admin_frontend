@@ -38,10 +38,9 @@ export const SideNavigationItem: FC<IProps> = ({
         !isContracted && setOpen(!open)
     }, [open,isContracted])
 
-
     return (
         <>
-            <LinkRouterWrapper to={path}>
+            <LinkRouterWrapper to={path} disable={'/' + path === location.pathname}>
                 <Tooltip title={isContracted ? name : null} placement={'right'}>
                     <ListItemButton onClick={handleClick}
                                     sx={{padding: theme.spacing(1), paddingLeft: theme.spacing(2), height: '48px'}}>

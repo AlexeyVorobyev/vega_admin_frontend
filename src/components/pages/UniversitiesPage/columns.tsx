@@ -1,5 +1,5 @@
 import {ICustomDataTableColumn} from "../../AlexDataTable/AlexDataTable";
-import {EGrade, IUniversityEntity} from "../../../redux/api/types/universities";
+import {IUniversityEntity, parseEGradeToRusName} from "../../../redux/api/types/universities";
 import {Tooltip} from "@mui/material";
 
 export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
@@ -49,7 +49,7 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
     {
         id: 'grade',
         label: 'Вид',
-        format: (value: IUniversityEntity) => value.grade === EGrade.High ? 'ВУЗ' : 'ССУЗ',
+        format: (value: IUniversityEntity) => parseEGradeToRusName(value.grade),
     },
     {
         id: 'description',

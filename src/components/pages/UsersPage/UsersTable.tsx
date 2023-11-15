@@ -33,6 +33,9 @@ export const UsersTable: FC = () => {
                        columnsSelect footer
                        serverSideOptions={serverSideOptions}
                        setServerSideOptions={setServerSideOptions}
+                       filterListIds={[
+                           'userRole',
+                       ]}
                        actionsConfig={{
                            view: {
                                columnName: 'id',

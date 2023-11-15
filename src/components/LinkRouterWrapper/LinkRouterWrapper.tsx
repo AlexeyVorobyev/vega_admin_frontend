@@ -9,6 +9,7 @@ interface IProps {
     children: ReactNode
     sx?: SxProps<Theme>
     tooltipTitle?: string
+    disable?: boolean
 }
 
 export const LinkRouterWrapper: FC<IProps> = ({
@@ -17,7 +18,8 @@ export const LinkRouterWrapper: FC<IProps> = ({
                                                   children,
                                                   useNavigateProp = false,
                                                   sx,
-                                                  tooltipTitle
+                                                  tooltipTitle,
+                                                  disable = false
                                               }) => {
 
     const navigate = useNavigate()
@@ -25,7 +27,7 @@ export const LinkRouterWrapper: FC<IProps> = ({
 
     return (
         <>
-            {to
+            {to && !disable
                 ? <Tooltip title={tooltipTitle ? tooltipTitle : ''}>
                     {useNavigateProp
                         ? <Box sx={sx}
@@ -33,12 +35,10 @@ export const LinkRouterWrapper: FC<IProps> = ({
                                    if (typeof to === 'number') {
                                        if (searchParams.get('from')) {
                                            navigate(JSON.parse(searchParams.get('from')!) as To)
-                                       }
-                                       else {
+                                       } else {
                                            navigate(to as number)
                                        }
-                                   }
-                                   else {
+                                   } else {
                                        navigate(to as To)
                                    }
                                }}>

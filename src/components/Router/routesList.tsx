@@ -66,6 +66,32 @@ export const routesList: IRoute[] = [
     },
 
     {
+        path: 'customization/specialities',
+        name: 'Настройка специальностей',
+        component: <Navigate to={`/customization/tests/${EPageType.table}`}/>
+    },
+    {
+        path: `customization/specialities/${EPageType.table}`,
+        name: 'Таблица специальностей',
+        component: <CustomizationPage/>
+    },
+    {
+        path: `customization/specialities/${EPageType.view}`,
+        name: 'Специальность',
+        component: <CustomizationPage/>
+    },
+    {
+        path: `customization/specialities/${EPageType.edit}`,
+        name: 'Настройка специальности',
+        component: <CustomizationPage/>
+    },
+    {
+        path: `customization/specialities/${EPageType.add}`,
+        name: 'Добавление специальности',
+        component: <CustomizationPage/>
+    },
+
+    {
         path: 'customization/users',
         name: 'Настройка пользователей',
         component: <Navigate to={`/customization/users/${EPageType.table}`}/>

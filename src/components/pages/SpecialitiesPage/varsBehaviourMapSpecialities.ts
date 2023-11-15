@@ -1,6 +1,6 @@
 import {ESort} from "../../../redux/api/types/universities";
 
-export const varsBehaviourMapUsers = (initialVars: any) => {
+export const varsBehaviourMapSpecialities = (initialVars: any) => {
 
     console.log('DEBUG INITIAL_VARS', initialVars)
     let resSort: string = ""
@@ -21,7 +21,8 @@ export const varsBehaviourMapUsers = (initialVars: any) => {
         ...(initialVars.page && {page: Number(initialVars.page)}),
         ...(initialVars.perPage && {size: Number(initialVars.perPage)}),
         ...(initialVars.sort && {sort: resSort}),
-        ...(initialVars.userRole && {roleFilter: initialVars.userRole})
+        ...(initialVars.simpleFilter && {titleFilter: initialVars.simpleFilter}),
+        ...(initialVars.educationLevel && {educationLevelFilter: initialVars.educationLevel})
     }
 
     console.log('DEBUG MUTATED_VARS', mutatedVars)

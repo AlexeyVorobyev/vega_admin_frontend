@@ -2,7 +2,7 @@ import {FC, useMemo} from "react";
 import {useSearchParams} from "react-router-dom";
 import {useUniversityQuery} from "../../../redux/api/universities.api";
 import {Box, CircularProgress, Grid, Tooltip, Typography} from "@mui/material";
-import {EGrade, IUniversityEntity} from "../../../redux/api/types/universities";
+import {IUniversityEntity, parseEGradeToRusName} from "../../../redux/api/types/universities";
 import {theme} from "../../Theme/theme";
 import {AlexDataView} from "../../formUtils/AlexDataView/AlexDataView";
 import {AlexImageView} from "../../formUtils/AlexImageView/AlexImageView";
@@ -45,8 +45,13 @@ export const UniversitiesCard: FC = () => {
                 <Grid container spacing={theme.spacing(2)}>
                     <Grid item xs={5}>
                         <AlexDataView label={'Фотография'}>
-                            {universityData.cardPhoto && <AlexImageView src={universityData.cardPhoto}
-                                           beforeLoadedSize={{width: '100%', height: '200px'}} modal/>}
+                            {universityData.cardPhoto &&
+                                <AlexImageView src={universityData.cardPhoto}
+                                               modal
+                                               beforeLoadedSize={{
+                                                   width: '100%',
+                                                   height: '200px'
+                                               }}/>}
                         </AlexDataView>
                     </Grid>
                     <Grid item xs={7}/>
@@ -57,7 +62,7 @@ export const UniversitiesCard: FC = () => {
                     </Grid>
                     <Grid item xs={6}>
                         <AlexDataView label={'Вид'}>
-                            {universityData.grade === EGrade.High ? 'ВУЗ' : 'ССУЗ'}
+                            {parseEGradeToRusName(universityData.grade)}
                         </AlexDataView>
                     </Grid>
                     <Grid item xs={6}>

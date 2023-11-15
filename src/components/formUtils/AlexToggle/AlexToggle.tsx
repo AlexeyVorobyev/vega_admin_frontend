@@ -15,6 +15,7 @@ interface IProps extends ToggleButtonGroupProps {
     error?: boolean,
     errorText?: string,
     exclusive?: boolean
+    enforceSelect?: boolean
 }
 
 const DEBUG = false
@@ -29,6 +30,7 @@ export const AlexToggle: React.FC<IProps> = ({
                                                  error,
                                                  errorText,
                                                  exclusive = true,
+                                                 enforceSelect = false,
                                                  ...props
                                              }) => {
     const {control} = useFormContext()
@@ -50,7 +52,10 @@ export const AlexToggle: React.FC<IProps> = ({
                     <ToggleButtonGroup
                         value={value}
                         exclusive={exclusive}
-                        onChange={(event,value) => onChange(value)}
+                        onChange={(event, value) => {
+                            if (enforceSelect && !value) return
+                            onChange(value)
+                        }}
                         {...props}
                     >
                         {options.map((option) => <ToggleButton key={option.id}

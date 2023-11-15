@@ -3,6 +3,7 @@ import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import PersonIcon from '@mui/icons-material/Person';
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 import {EPageType} from "../../pages/СustomizationPage/СustomizationPage";
 
 export interface ISideNavigationConfig {
@@ -29,7 +30,11 @@ export const sideNavigationConfig: ISideNavigationConfig[] = [
                 name: 'Учебные заведения',
                 icon: <SchoolOutlinedIcon/>
             },
-
+            {
+                path: `customization/specialities/${EPageType.table}`,
+                name: 'Специальности',
+                icon: <HistoryEduIcon/>
+            },
             // {path: 'customization/tests', name: 'Тесты', icon: <QuizIcon/>}
         ]
     },

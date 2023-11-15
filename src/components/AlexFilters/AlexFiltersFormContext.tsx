@@ -23,7 +23,7 @@ export const AlexFiltersFormContext: FC<IProps> = ({
                                                    }) => {
 
     const methods = useForm()
-    const {handleSubmit, reset, formState:{errors}} = methods
+    const {handleSubmit, reset, formState: {errors}} = methods
 
     //синхронизация фильтров в форме с текущими serverSideOptions
     useEffect(() => {
@@ -37,8 +37,10 @@ export const AlexFiltersFormContext: FC<IProps> = ({
         DEBUG && console.log(DEBUG_PREFIX, 'data onSubmit', data)
         setServerSideOptions((prev) => {
             return new Map([
-                ...Array.from(prev).filter((param) => !filterListIds.includes(param[0])),
-                ...(new Map(Object.entries(data).filter((param) => param[1]))),
+                ...Array.from(prev)
+                    .filter((param) => !filterListIds.includes(param[0])),
+                ...(new Map(Object.entries(data)
+                    .filter((param) => param[1]))),
             ])
         })
         setAnchorEl(null)
