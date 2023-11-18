@@ -17,16 +17,28 @@ export const ToastProvider: FC<IProps> = ({children}) => {
 interface IToastPayload {
     message: string,
     properties: {
-        [key:string]: any
+        [key: string]: any
     }
 }
 
-export const toastSettings:Map<string,IToastPayload> = new Map([
-    ['CONNECTION_LOST', {
+interface IToastSettings {
+    connectionLost: IToastPayload
+    mutationSuccess: IToastPayload
+}
+
+export const toastSettings: IToastSettings = {
+    connectionLost: {
         message: 'Соединение с сервером утеряно ',
         properties: {
             position: toast.POSITION.TOP_CENTER,
             autoClose: 5000,
         }
-    }]
-])
+    },
+    mutationSuccess: {
+        message: 'Операция выполнена успешно ',
+        properties: {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 5000,
+        }
+    }
+}

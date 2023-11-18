@@ -15,6 +15,7 @@ export const specialitiesApi = api.injectEndpoints({
                 url: `/speciality/${settings.id}`,
                 method: 'GET',
             }),
+            providesTags: ['specialities']
         }),
         specialityDelete: builder.mutation<any, { id: string }>({
             query: (settings) => ({

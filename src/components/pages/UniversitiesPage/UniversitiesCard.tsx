@@ -1,8 +1,8 @@
-import {FC, useMemo} from "react";
+import {FC} from "react";
 import {useSearchParams} from "react-router-dom";
 import {useUniversityQuery} from "../../../redux/api/universities.api";
 import {Box, CircularProgress, Grid, Tooltip, Typography} from "@mui/material";
-import {IUniversityEntity, parseEGradeToRusName} from "../../../redux/api/types/universities";
+import {parseEGradeToRusName} from "../../../redux/api/types/universities";
 import {theme} from "../../Theme/theme";
 import {AlexDataView} from "../../formUtils/AlexDataView/AlexDataView";
 import {AlexImageView} from "../../formUtils/AlexImageView/AlexImageView";
@@ -11,15 +11,11 @@ export const UniversitiesCard: FC = () => {
     const [searchParams] = useSearchParams()
 
     const {
-        data,
+        data: universityData,
         isFetching,
         isLoading,
         isSuccess
-    } = useUniversityQuery({id: searchParams.get('id')!}, {
-        skip: false,
-    })
-
-    const universityData: IUniversityEntity = useMemo(() => data as IUniversityEntity, [data])
+    } = useUniversityQuery({id: searchParams.get('id')!})
 
     return (
         <Box sx={{

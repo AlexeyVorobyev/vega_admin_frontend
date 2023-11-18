@@ -88,14 +88,14 @@ export const CustomizationPage: FC = () => {
                     component: <UniversitiesCard/>,
                     button: 'учебное заведение'
                 },
-                // [EPageType.add]: {
-                //     component: UniversitiesForm,
-                //     title: 'учебного заведения'
-                // },
-                // [EPageType.edit]: {
-                //     component: UniversitiesForm,
-                //     title: 'учебного заведения'
-                // },
+                [EPageType.add]: {
+                    component: UniversitiesForm,
+                    title: 'учебного заведения'
+                },
+                [EPageType.edit]: {
+                    component: UniversitiesForm,
+                    title: 'учебного заведения'
+                },
             }
         ],
         ['users',

@@ -173,7 +173,7 @@ export const AlexDataTable: FC<IProps> = ({
                                     <TableRow hover={Boolean(actionsConfig?.view)}
                                               sx={{cursor: actionsConfig?.view ? 'pointer' : undefined}} role="checkbox"
                                               tabIndex={-1} key={index}
-                                              onClick={actionsConfig?.view ? () => {
+                                              onDoubleClick={actionsConfig?.view ? () => {
                                                   navigate(`${actionsConfig?.view?.path!}?id=${row.get(actionsConfig!.view!.columnName)}${actionsConfig!.view!.params ? '&' + actionsConfig!.view!.params.toString() : ''}`)
                                               } : undefined}>
                                         {[

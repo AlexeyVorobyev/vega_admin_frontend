@@ -68,7 +68,7 @@ export const routesList: IRoute[] = [
     {
         path: 'customization/specialities',
         name: 'Настройка специальностей',
-        component: <Navigate to={`/customization/tests/${EPageType.table}`}/>
+        component: <Navigate to={`/customization/specialities/${EPageType.table}`}/>
     },
     {
         path: `customization/specialities/${EPageType.table}`,

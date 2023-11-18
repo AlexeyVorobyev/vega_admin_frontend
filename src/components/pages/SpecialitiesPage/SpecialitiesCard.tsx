@@ -1,24 +1,20 @@
-import {FC, useMemo} from "react";
+import {FC} from "react";
 import {useSearchParams} from "react-router-dom";
 import {Box, CircularProgress, Grid} from "@mui/material";
 import {theme} from "../../Theme/theme";
 import {AlexDataView} from "../../formUtils/AlexDataView/AlexDataView";
 import {useSpecialityQuery} from "../../../redux/api/specialities.api";
-import {ISpecialityEntity, parseEEducationLevelToRusName} from "../../../redux/api/types/specialities";
+import {parseEEducationLevelToRusName} from "../../../redux/api/types/specialities";
 
 export const SpecialitiesCard: FC = () => {
     const [searchParams] = useSearchParams()
 
     const {
-        data,
+        data: specialityData,
         isFetching,
         isLoading,
         isSuccess
-    } = useSpecialityQuery({id: searchParams.get('id')!}, {
-        skip: false,
-    })
-
-    const specialityData: ISpecialityEntity = useMemo(() => data as ISpecialityEntity, [data])
+    } = useSpecialityQuery({id: searchParams.get('id')!})
 
     return (
         <Box sx={{

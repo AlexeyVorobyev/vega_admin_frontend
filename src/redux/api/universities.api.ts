@@ -15,6 +15,7 @@ export const universitiesApi = api.injectEndpoints({
                 url: `/university/${settings.id}`,
                 method: 'GET',
             }),
+            providesTags: ['universities']
         }),
         universityDelete: builder.mutation<any, { id: string }>({
             query: (settings) => ({

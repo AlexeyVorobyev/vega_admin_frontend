@@ -1,24 +1,20 @@
-import {FC, useMemo} from "react";
+import {FC} from "react";
 import {useSearchParams} from "react-router-dom";
 import {Box, CircularProgress, Grid} from "@mui/material";
 import {theme} from "../../Theme/theme";
 import {AlexDataView} from "../../formUtils/AlexDataView/AlexDataView";
 import {useUserQuery} from "../../../redux/api/users.api";
-import {IUserEntity, parseEUserRoleToRusName} from "../../../redux/api/types/users";
+import {parseEUserRoleToRusName} from "../../../redux/api/types/users";
 
 export const UsersCard: FC = () => {
     const [searchParams] = useSearchParams()
 
     const {
-        data,
+        data: userData,
         isFetching,
         isLoading,
         isSuccess
-    } = useUserQuery({id: searchParams.get('id')!}, {
-        skip: false,
-    })
-
-    const userData: IUserEntity = useMemo(() => data as IUserEntity, [data])
+    } = useUserQuery({id: searchParams.get('id')!})
 
     return (
         <Box sx={{

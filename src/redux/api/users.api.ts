@@ -14,6 +14,7 @@ export const usersApi = api.injectEndpoints({
                 url: `/user/${settings.id}`,
                 method: 'GET',
             }),
+            providesTags: ['users']
         }),
         userDelete: mutation<any, { id: string }>({
             query: (settings) => ({
