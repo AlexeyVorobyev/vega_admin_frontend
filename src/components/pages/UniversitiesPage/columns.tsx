@@ -28,7 +28,7 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
                 <a href={value.site}
                    onClick={(event) => event.stopPropagation()}>{value.site}</a>
             </Tooltip>
-        )
+        ),
     },
     {
         id: 'studentsTelegramChatUrl',
@@ -44,12 +44,14 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
     {
         id: 'town',
         label: 'Город',
-        format: (value: IUniversityEntity) => value.town.title
+        format: (value: IUniversityEntity) => value.town.title,
+        formatText: (value: IUniversityEntity) => value.town.title
     },
     {
         id: 'grade',
         label: 'Вид',
         format: (value: IUniversityEntity) => parseEGradeToRusName(value.grade),
+        formatText: (value: IUniversityEntity) => parseEGradeToRusName(value.grade),
     },
     {
         id: 'description',
@@ -67,11 +69,5 @@ export const UniversitiesTableColumns: ICustomDataTableColumn[] = [
         ),
         display: false
     },
-    // {
-    //     id: 'priority',
-    //     label: 'Приоритет',
-    //     format: (value: IUniversityEntity) => value.priority.toString(),
-    //     display: false
-    // },
 ]
 

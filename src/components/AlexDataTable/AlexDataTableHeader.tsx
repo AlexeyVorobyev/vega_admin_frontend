@@ -5,6 +5,7 @@ import {ICustomDataTableColumn} from "./AlexDataTable";
 import {AlexDataTableSimpleFilter} from "./AlexDataTableSimpleFilter";
 import {AlexDataTableColumnsSelect} from "./AlexDataTableColumnsSelect";
 import {AlexFilters} from "../AlexFilters/AlexFilters";
+import {AlexDataTableDownloadCSV} from "./AlexDataTableDownloadCSV";
 
 interface IProps {
     simpleFilter: boolean
@@ -14,16 +15,22 @@ interface IProps {
     filterListIds?: string[]
     serverSideOptions: Map<string, any>
     setServerSideOptions: React.Dispatch<React.SetStateAction<Map<string, any>>>
+    downloadCSV: boolean
+    data: Object[]
+    columns: ICustomDataTableColumn[]
 }
 
 export const AlexDataTableHeader: FC<IProps> = ({
+                                                    columns,
                                                     simpleFilter,
                                                     columnsState,
                                                     columnsSelect,
                                                     setColumnsState,
                                                     filterListIds,
                                                     serverSideOptions,
-                                                    setServerSideOptions
+                                                    setServerSideOptions,
+                                                    downloadCSV,
+                                                    data
                                                 }) => {
     const amountOfChosenFilters = useMemo(() => {
         if (!filterListIds) return 0
@@ -46,6 +53,7 @@ export const AlexDataTableHeader: FC<IProps> = ({
             {filterListIds &&
                 <AlexFilters filterListIds={filterListIds} setServerSideOptions={setServerSideOptions}
                              serverSideOptions={serverSideOptions}/>}
+            {downloadCSV && <AlexDataTableDownloadCSV columnsState={columnsState} data={data} columns={columns}/>}
             {columnsSelect &&
                 <AlexDataTableColumnsSelect columnsState={columnsState} setColumnsState={setColumnsState}/>}
         </Stack>

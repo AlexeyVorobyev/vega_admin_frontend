@@ -32,9 +32,9 @@ export const SpecialitiesTable: FC = () => {
         <AlexDataTable columns={SpecialitiesTableColumns}
                        data={result?.currentData?.content}
                        availablePages={result?.currentData?.totalPages}
-                       perPageOptions={['1', '2', '4', '8', '16', '32']}
+                       perPageOptions={['1', '2', '4', '8', '16', '32', '64', '128']}
                        availableElements={result?.currentData?.totalElements}
-                       columnsSelect simpleFilter footer
+                       columnsSelect simpleFilter footer downloadCSV
                        filterListIds={[
                            'educationLevel',
                        ]}

@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {FC, ReactNode, useCallback, useEffect, useMemo, useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -20,13 +20,14 @@ export interface ICustomDataTableColumn {
     label: string,
     align?: "center" | "left" | "right" | "inherit" | "justify",
     minWidth?: number,
-    format?: (value: any) => any,
+    format?: (value: any) => ReactNode,
+    formatText?: (value: any) => string,
     display?: boolean
     sort?: boolean
     link?: boolean
 }
 
-export type ICustomDataTableRow = Map<string, string>
+export type ICustomDataTableRow = Map<string, ReactNode>
 
 export interface IActionConfig {
     columnName: string // номер столбца для использования в роли id
@@ -57,10 +58,48 @@ interface IProps {
     filterListIds?: string[],
     serverSideOptions: Map<string, any>
     setServerSideOptions: React.Dispatch<React.SetStateAction<Map<string, any>>>
+    downloadCSV?: boolean
 }
 
 const DEBUG = true
 const DEBUG_PREFIX = 'ALEX_DATA_TABLE'
+
+export enum EFormatFlatDataMode {
+    jsx = 'jsx',
+    text = 'text'
+}
+
+export const formatFlatData = (
+    columns: ICustomDataTableColumn[],
+    data: Object[],
+    mode: `${EFormatFlatDataMode}`
+): ICustomDataTableRow[] | null => {
+    if (!data) return null
+    const resultArr = []
+    for (const item of data) {
+        const resultFlatRow = new Map()
+        for (const column of columns) {
+            if (!item.hasOwnProperty(column.id)) continue
+            if (mode === EFormatFlatDataMode.jsx) {
+                if (typeof item[column.id as keyof Object] !== 'string' || column.format) {
+                    if (!column.format) continue
+                    resultFlatRow.set(column.id, column.format(item))
+                } else {
+                    resultFlatRow.set(column.id, item[column.id as keyof Object])
+                }
+            } else if (mode === EFormatFlatDataMode.text) {
+                if (typeof item[column.id as keyof Object] !== 'string' || column.formatText) {
+                    if (!column.formatText) continue
+                    resultFlatRow.set(column.id, column.formatText(item))
+                } else {
+                    resultFlatRow.set(column.id, item[column.id as keyof Object])
+                }
+            }
+        }
+        resultArr.push(resultFlatRow)
+    }
+    return resultArr
+}
 
 export const AlexDataTable: FC<IProps> = ({
                                               columns,
@@ -74,29 +113,11 @@ export const AlexDataTable: FC<IProps> = ({
                                               footer = false,
                                               filterListIds,
                                               setServerSideOptions,
-                                              serverSideOptions
+                                              serverSideOptions,
+                                              downloadCSV = false
                                           }) => {
 
     DEBUG && console.log(DEBUG_PREFIX, 'DATA', data)
-
-    const FormatFlatData = useCallback((columns: ICustomDataTableColumn[], data: Object[]): ICustomDataTableRow[] | null => {
-        if (!data) return null
-        const resultArr = []
-        for (const item of data) {
-            const resultFlatRow = new Map()
-            for (const column of columns) {
-                if (!item.hasOwnProperty(column.id)) continue
-                if (typeof item[column.id as keyof Object] !== 'string' || column.format) {
-                    if (!column.format) continue
-                    resultFlatRow.set(column.id, column.format(item))
-                } else {
-                    resultFlatRow.set(column.id, item[column.id as keyof Object])
-                }
-            }
-            resultArr.push(resultFlatRow)
-        }
-        return resultArr
-    }, [columns, data])
 
     const [columnsState, setColumnsState] = useState<ICustomDataTableColumn[]>(
         sessionStorage.getItem(`columnsDataBase${location.pathname}`)
@@ -108,7 +129,7 @@ export const AlexDataTable: FC<IProps> = ({
         sessionStorage.setItem(`columnsDataBase${location.pathname}`, JSON.stringify(columnsState))
     }, [columnsState])
 
-    const rows = useMemo(() => FormatFlatData(columns, data), [columns, data])
+    const rows = useMemo(() => formatFlatData(columns, data, EFormatFlatDataMode.jsx), [columns, data])
     const navigate = useNavigate()
 
     return (
@@ -117,7 +138,7 @@ export const AlexDataTable: FC<IProps> = ({
                 <AlexDataTableHeader simpleFilter={simpleFilter} columnsSelect={columnsSelect}
                                      columnsState={columnsState} setColumnsState={setColumnsState}
                                      filterListIds={filterListIds} setServerSideOptions={setServerSideOptions}
-                                     serverSideOptions={serverSideOptions}/>}
+                                     serverSideOptions={serverSideOptions} downloadCSV={downloadCSV} data={data} columns={columns}/>}
             {!rows && (<Box sx={{
                 width: '100%',
                 height: '100%',
