@@ -1,6 +1,8 @@
-import {ReactNode} from "react";
-import {CustomizationPage, EPageType} from "../pages/СustomizationPage/СustomizationPage";
-import {Navigate} from "react-router-dom";
+import {ReactNode} from 'react'
+import {CustomizationPage, EPageType} from '../pages/СustomizationPage/СustomizationPage'
+import {Navigate} from 'react-router-dom'
+import {NotExistPage} from '../pages/NotExistPage/NotExistPage'
+import {CabinetPage} from '../pages/CabinetPage/CabinetPage'
 
 export interface IRoute {
     path: string,
@@ -12,6 +14,13 @@ export interface IRoute {
 
 export const routesList: IRoute[] = [
     {path: '/', name: 'Статистика', component: null},
+    {path: '*', name: 'Не существует', component: <NotExistPage/>},
+
+    {
+        path: 'cabinet',
+        name: 'Личный кабинет',
+        component: <CabinetPage/>
+    },
 
     {
         path: `customization/universities`,

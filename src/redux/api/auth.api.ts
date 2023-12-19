@@ -5,7 +5,7 @@ import {
 } from "./types/auth";
 export const authApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        auth: builder.mutation<LoginResponse,LoginPayload>({
+        auth: builder.mutation<any,LoginPayload>({
             query: (body) => ({
                 url:`/auth`,
                 method: 'POST',
@@ -14,14 +14,17 @@ export const authApi = api.injectEndpoints({
                 },
                 body
             }),
+            transformResponse(apiResponse, meta) {
+                return {
+                    apiResponse,
+                    authorization: meta?.response?.headers.get('authorization')
+                }
+            }
         }),
-        me: builder.mutation<any,null>({
+        me: builder.query<any,any>({
             query: () => ({
                 url:`/me`,
                 method: 'POST',
-                headers: {
-                    'authorization':'testdatabase'
-                }
             }),
         })
     }),
@@ -30,5 +33,5 @@ export const authApi = api.injectEndpoints({
 
 export const {
     useAuthMutation,
-    useMeMutation
+    useMeQuery
 } = authApi

@@ -16,7 +16,7 @@ export const RouterComponent: FC<{ routesList: IRoute[] }> = ({routesList}) => {
     return (
         <Routes>
             {constructRoutes(routesList)}
-            <Route path={'*'} element={<NotExistPage/>}/>
+            {/*<Route path={'*'} element={<NotExistPage/>}/>*/}
         </Routes>
     )
 }

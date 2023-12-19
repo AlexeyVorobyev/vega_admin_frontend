@@ -4,6 +4,7 @@ import {SideNavigation} from "./SideBar/SideNavigation";
 import {theme} from "../Theme/theme";
 import {PageWrapper} from "./PageWrapper";
 import {ErrorBoundary} from "./ErrorBoundary/ErrorBoundary";
+import UserPanel from './UserPanel/UserPanel'
 
 interface IProps {
     children:ReactNode
@@ -19,8 +20,9 @@ export const SkeletonWrapper:FC<IProps> = ({children}) => {
                 padding:theme.spacing(2),
                 boxShadow: 2
             }}>
-                <Stack alignItems={'center'} direction={'row'} height={'100%'}>
+                <Stack alignItems={'center'} direction={'row'} height={'100%'} justifyContent={'space-between'}>
                     <Typography variant={'h3'} color={theme.palette.primary.contrastText}>VEGA</Typography>
+                    <UserPanel/>
                 </Stack>
             </Box>
             <Stack height={'calc(100vh - 70px)'} width={'100%'} direction={'row'}>

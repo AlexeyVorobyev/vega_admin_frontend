@@ -1,5 +1,6 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {IUniversitiesPayload} from "./types/universities";
+import {getTokens} from '../../components/functions/getAuthToken'
 
 const disabledAuthTokenEndpoints = [
     'auth',
@@ -13,7 +14,7 @@ export const api = createApi({
             if (disabledAuthTokenEndpoints.includes(api.endpoint)) {
                 return headers
             }
-            headers.set('Authorization', `testdatabase`)
+            headers.set('Authorization', getTokens().authorization || "")
             return headers
         }
     }),

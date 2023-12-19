@@ -1,10 +1,8 @@
 interface IGetTokensReturnValue {
-    refreshToken:string | null,
-    accessToken:string | null
+    authorization:string | null,
 }
 export const getTokens = ():IGetTokensReturnValue => {
     return {
-        refreshToken: localStorage.getItem('refreshToken'),
-        accessToken: localStorage.getItem('accessToken')
-    };
+        authorization: localStorage.getItem('authorization')
+    }
 }
