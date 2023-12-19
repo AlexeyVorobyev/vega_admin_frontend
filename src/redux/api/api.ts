@@ -1,6 +1,7 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {IUniversitiesPayload} from "./types/universities";
 import {getTokens} from '../../components/functions/getAuthToken'
+import CONFIG from '../../globalConfig'
 
 const disabledAuthTokenEndpoints = [
     'auth',
@@ -9,7 +10,7 @@ export const api = createApi({
     reducerPath: 'api',
     tagTypes: ['universities', 'towns', 'users','specialities'],
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_APP_API_HOST,
+        baseUrl: CONFIG.api_host,
         prepareHeaders: (headers, api) => {
             if (disabledAuthTokenEndpoints.includes(api.endpoint)) {
                 return headers

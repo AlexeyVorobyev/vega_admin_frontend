@@ -2,7 +2,7 @@ import React from "react";
 import {FormProvider, useForm} from "react-hook-form";
 import {Button, Grid, Paper, Stack} from "@mui/material";
 import {AlexInput} from "../../formUtils/AlexInput/AlexInput";
-import {useAuthMutation, useMeMutation} from "../../../redux/api/auth.api";
+import {useAuthMutation} from "../../../redux/api/auth.api";
 import {useActions} from '../../../redux/hooks/useActions'
 
 export const AuthPage: React.FC<any> = () => {
@@ -14,13 +14,13 @@ export const AuthPage: React.FC<any> = () => {
 
     const onSubmit = (data: any) => {
         console.log(data)
-        // auth(data)
-        //     .then((response) => {
-        //         console.log(response)
-        //     })
-        //     .catch((error) => {
-        //         console.log(error)
-        //     })
+        auth(data)
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
         localStorage.setItem('authorization','DQSpHQra3kDPAV3ltI6uLEr2 ')
         setLogin(true)
     }

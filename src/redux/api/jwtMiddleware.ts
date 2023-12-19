@@ -7,7 +7,7 @@ export const jwtMiddleware: Middleware =
     (state) => (next: any) => (action: any) => {
         if (action && isRejectedWithValue(action)) {
             console.warn('We got a rejected action!', action.payload.status)
-            if (action.payload.status === 401) {
+            if (action.payload.status === 401 || action.payload.status === 403) {
                 localStorage.clear()
                 location.reload()
                 // state.dispatch(
