@@ -15,14 +15,13 @@ export const AuthPage: React.FC<any> = () => {
     const onSubmit = (data: any) => {
         console.log(data)
         auth(data)
-            .then((response) => {
-                console.log(response)
+            .then((response:any) => {
+                localStorage.setItem('authorization',response.data.authorization)
+                setLogin(true)
             })
             .catch((error) => {
                 console.log(error)
             })
-        localStorage.setItem('authorization','DQSpHQra3kDPAV3ltI6uLEr2 ')
-        setLogin(true)
     }
 
     return (
