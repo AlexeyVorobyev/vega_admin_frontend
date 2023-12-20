@@ -18,6 +18,9 @@ COPY . ./
 RUN yarn build
 
 
-# Stage 3: run preview:
+# Stage 3: run serve:
+RUN yarn global add serve
+
 EXPOSE 8000
-CMD ["yarn", "preview"]
+
+CMD serve -l 8000 -s dist
